@@ -7,6 +7,7 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/outputs.h>
 
 &mt { tapping-term-ms = <100>; };
 
@@ -16,9 +17,9 @@
 
         default_layer {
             // -----------------------------------------------------------------------------------------
-            // |  TAB |  Q  |  W  |  E  |  R  |  T  |   |  Z  |  U   |  I  |  O  |  P  | BKSP |
-            // | CTRL |  LSHIFT/A  |  S  |  D  |  F  |  G  |   |  H  |  J   |  K  |  L  |  RSHIFT/;  |  '   |
-            // | SHFT |  Y  |  X  |  C  |  V  |  B  |   |  N  |  M   |  ,  |  .  |  /  | ESC  |
+            // |  TAB |  A  |  Z  |  E  |  R  |  T  |   |  Z  |  U   |  I  |  O  |  P  | BKSP |
+            // | CTRL |  LSHIFT/Q  |  S  |  D  |  F  |  G  |   |  H  |  J   |  K  |  L  |  RSHIFT/M  |  '   |
+            // | SHFT |  W  |  X  |  C  |  V  |  B  |   |  N  |  ;   |  ,  |  .  |  /  | ESC  |
             //                    | GUI | Lower | Raise |   | ENT | SPC  | ALT |
 
             display-name = "Base";
