@@ -19,14 +19,7 @@
 #
 ---
 board:
-  [
-    "adafruit_kb2040",
-    "nice_nano_v2",
-    "nice_nano",
-    "nrf52840_m2",
-    "nrf52840dk_nrf52840",
-    "sparkfun_pro_micro_rp2040",
-  ]
+  ["adafruit_kb2040", "nice_nano_v2", "nice_nano", "sparkfun_pro_micro_rp2040"]
 shield: ["corne_left", "corne_right"]
 # include:
 #   - board: adafruit_kb2040
