@@ -3,9 +3,11 @@ on:
   push:
     branches:
       - "!editor_proof"
+      - "*"
   pull_request:
     branches:
       - "!editor_proof"
+      - "*"
   workflow_dispatch:
 
 jobs:
