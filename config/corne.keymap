@@ -103,62 +103,6 @@
 
 
 / {
-    behaviors {
-
-        /*
-        Hold-tap configuration for home row mods
-        - Uses tap-preferred flavor to prioritize character output
-        - 220ms tapping term balances hold/tap detection
-        - 150ms quick-tap allows fast repeated taps
-        - Global quick-tap enables consistent behavior across all keys
-        */
-        // Define a new hold-tap behavior named "ht"
-        ht: hold_tap {
-            // Label for identification
-            label = "hold_tap";
-            // Specify this is a ZMK hold-tap behavior
-            compatible = "zmk,behavior-hold-tap";
-            // Number of binding parameters required (hold binding and tap binding)
-            #binding-cells = <2>;
-            // Prefer tap action over hold when timing is ambiguous
-            flavor = "tap-preferred";
-            // Time in milliseconds to determine between tap and hold (220ms)
-            tapping-term-ms = <220>;
-            // Allow quick tap within 150ms to repeat the tap action
-            quick-tap-ms = <150>;
-        };
-
-    };
-
-
-    combos {
-        compatible = "zmk,combos";
-
-        // E + W => é
-        combo_e_acute: combo {
-            timeout-ms = <50>;           // Délai court pour la détection
-            key-positions = <E W>;       // Positions des touches E et W
-            bindings = <&kp FR_EACU>;    // Output du é
-            require-prior-idle-ms = <100>;
-        };
-
-        // E + R => è
-        combo_e_acute: combo {
-            timeout-ms = <50>;           // Délai court pour la détection
-            key-positions = <E R>;       // Positions des touches E et R
-            bindings = <&kp FR_EGRV>;    // Output du è
-            require-prior-idle-ms = <100>;
-        };
-
-        // E + W + R => ê
-        combo_e_circumflex {
-            key-positions = <E W R>;
-            timeout-ms = <50>;
-            bindings = <&kp FR_E_CIRCUMFLEX>;
-            require-prior-idle-ms = <150>;
-        };
-    };
-
 
     conditional_layers {
 
