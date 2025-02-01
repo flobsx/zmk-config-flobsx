@@ -160,7 +160,7 @@ HRMR(k1,k2,k3,k4) maps to:
         combo_e_acute: combo {
             timeout-ms = <50>;           // Délai court pour la détection
             key-positions = <E W>;       // Positions des touches E et W
-            bindings = <&kp FR_E_ACUTE>; // Output du é
+            bindings = <&kp FR_EACU>;    // Output du é
             require-prior-idle-ms = <100>;
         };
 
