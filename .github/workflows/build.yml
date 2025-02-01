@@ -1,14 +1,5 @@
 name: Build ZMK firmware
-on:
-  push:
-    branches:
-      - "!editor_proof"
-      - "*"
-  pull_request:
-    branches:
-      - "!editor_proof"
-      - "*"
-  workflow_dispatch:
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
