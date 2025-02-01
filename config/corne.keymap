@@ -104,19 +104,6 @@
 
 / {
 
-    conditional_layers {
-
-        Copy// Enable third layer when both RIG and LEF layers are active
-        // This creates a tri-layer state for additional key mappings
-        compatible = "zmk,conditional-layers";
-        tri_layer {
-            if-layers = <RIG LEF>;
-            then-layer = <TRI>;
-        };
-
-    };
-
-
     keymap {
         compatible = "zmk,keymap";
         default_layer {
