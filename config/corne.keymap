@@ -157,7 +157,7 @@ HRMR(k1,k2,k3,k4) maps to:
         compatible = "zmk,combos";
 
         // E + W => é
-        combo_e_acute: combo {
+        combo_e_acute {
             timeout-ms = <50>;           // Délai court pour la détection
             key-positions = <E W>;       // Positions des touches E et W
             bindings = <&kp FR_EACU>;    // Output du é
@@ -165,7 +165,7 @@ HRMR(k1,k2,k3,k4) maps to:
         };
 
         // E + R => è
-        combo_e_agrave: combo {
+        combo_e_agrave {
             timeout-ms = <50>;           // Délai court pour la détection
             key-positions = <E R>;       // Positions des touches E et R
             bindings = <&kp FR_EGRV>;    // Output du è
