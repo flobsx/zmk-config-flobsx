@@ -191,7 +191,7 @@ HRMR(k1,k2,k3,k4) maps to:
 
         // Define combo for Space+Enter to toggle between main and fourth layer
         toggle_fourth_layer {
-            key-positions = <SPACE ENTER 38 39>;
+            key-positions = <38 39>;
             timeout-ms = <50>;
             bindings = <&tog MOUSE>;
             // Prevent accidental activation
