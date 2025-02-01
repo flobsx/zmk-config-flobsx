@@ -116,14 +116,14 @@
         // Define combo for Space+Enter to toggle between main and fourth layer
 
         toggle_fourth_layer {
-            key-positions = <SPACE ENTER>;
+            key-positions = <SPACE ENTER 38 39>;
             timeout-ms = <50>;
             bindings = <&tog MOUSE>;
 
             // Prevent accidental activation
 
             require-prior-idle-ms = <100>;
-            layers = <BASE MOUSE>;  // Only active in layer 0 (default) and layer 4
+            layers = <4>;  // Only active in layer 0 (default) and layer 4
         };
     };
 
