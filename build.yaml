@@ -18,19 +18,8 @@
 #     artifact-name: corne_left_with_studio
 #
 ---
-board:
-  ["adafruit_kb2040", "nice_nano_v2", "nice_nano", "sparkfun_pro_micro_rp2040"]
-shield: ["corne_left", "corne_right"]
-# include:
-#   - board: adafruit_kb2040
-#     shield: splitkb_aurora_corne_left
-#     # snippet: studio-rpc-usb-uart
-#     # cmake-args: -DCONFIG_ZMK_STUDIO=y
-#     # artifact-name: corne_left_with_studio
-#   - board: nice_nano_v2
-#     shield: splitkb_aurora_corne_right
-#   # snippet: studio-rpc-usb-uart
-#   # cmake-args: -DCONFIG_ZMK_STUDIO=y
-#   # artifact-name: corne_right_with_studio
-#   # - board: nice_nano_v2
-#   #   shield: settings_reset
+include:
+  - board: nice_nano_v2
+    shield: corne_left
+  - board: nice_nano_v2
+    shield: corne_right
