@@ -95,25 +95,6 @@
 #define FR_CURR RA(FR_DLR)   // ¤
 
 
-// Home row mods macro
-/*
-HRML(k1,k2,k3,k4) maps to:
-- k1 with Left Shift when held
-- k2 with Left Alt when held
-- k3 with Left Control when held
-- k4 with Left GUI (Windows/Command) when held
-*/
-#define HRML(k1,k2,k3,k4) &ht LSHIFT k1 &ht LALT k2  &ht LCTRL k3  &ht LGUI k4
-
-/*
-HRMR(k1,k2,k3,k4) maps to:
-- k1 with Right GUI when held
-- k2 with Right Control when held
-- k3 with Right Alt when held
-- k4 with Right Shift when held
-*/
-#define HRMR(k1,k2,k3,k4) &ht RGUI k1  &ht RCTRL k2  &ht RALT k3 &ht RSHIFT k4
-
 // Right Shift + Alt Gr
 #define RSA(k) RS(RA(k))
 
@@ -205,7 +186,7 @@ HRMR(k1,k2,k3,k4) maps to:
             &kp ESC     &kp Q      &kp W      &kp E      &kp R      &kp T          &kp Y      &kp U      &kp I      &kp O      &kp P      &kp BSPC
         //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
         //│  TAB     │  Q       │  S       │  D       │  F       │  G       │   │  H       │  J       │  K       │  L       │  M       │  DELETE  │
-            &kp TAB     HRML( A,     S,         D,         F)       &kp G          &kp H      HRMR(J,        K,           L,    SEMI)     &kp DEL
+            &kp TAB     &kp A      &kp S      &kp        &kp F      &kp G          &kp H       &kp J     &kp K      &kp L     &kp SEMI     &kp DEL
         //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
         //│          │  W       │  X       │  C       │  V       │  B       │   │  N       │ ,?       │ ;.       │ :/       │ =+       │  -_      │
             &kp LSHIFT  &kp Z      &kp X      &kp C      &kp V      &kp B          &kp N     &kp M      &kp COMMA  &kp DOT    &kp FSLH    &kp EQUAL
