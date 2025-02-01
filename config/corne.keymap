@@ -149,6 +149,7 @@ HRMR(k1,k2,k3,k4) maps to:
             compatible = "zmk,behavior-hold-tap";
             // Number of binding parameters required (hold binding and tap binding)
             #binding-cells = <2>;
+            bindings = <&kp>, <&kp>;
             // Prefer tap action over hold when timing is ambiguous
             flavor = "tap-preferred";
             // Time in milliseconds to determine between tap and hold (220ms)
