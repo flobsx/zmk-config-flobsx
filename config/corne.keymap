@@ -183,7 +183,7 @@ HRMR(k1,k2,k3,k4) maps to:
         combo_e_circumflex {
             key-positions = <E W R>;
             timeout-ms = <50>;
-            bindings = <&kp FR_E_CIRCUMFLEX>;
+            bindings = <&kp FR_CIRC &kp E>;
             require-prior-idle-ms = <150>;
         };
 
