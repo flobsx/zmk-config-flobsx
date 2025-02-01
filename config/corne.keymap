@@ -164,13 +164,13 @@ HRMR(k1,k2,k3,k4) maps to:
     combos {
         compatible = "zmk,combos";
 
-        // // E + W => é
-        // combo_e_acute {
-        //     timeout-ms = <50>;           // Délai court pour la détection
-        //     key-positions = <E W>;       // Positions des touches E et W
-        //     bindings = <&kp FR_EACU>;    // Output du é
-        //     require-prior-idle-ms = <100>;
-        // };
+        // E + W => é
+        combo_e_acute {
+            timeout-ms = <50>;           // Délai court pour la détection
+            key-positions = <E W>;       // Positions des touches E et W
+            bindings = <&kp FR_EACU>;    // Output du é
+            require-prior-idle-ms = <100>;
+        };
 
         // // E + R => è
         // combo_e_agrave {
