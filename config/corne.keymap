@@ -195,7 +195,7 @@ HRMR(k1,k2,k3,k4) maps to:
             bindings = <&tog MOUSE>;
             // Prevent accidental activation
             require-prior-idle-ms = <100>;
-            layers = <BASE MOUSE>;  // Only active in layer 0 (default) and layer 4
+            layers = <0 4>;  // Only active in layer 0 (default) and layer 4
         };
 
     };
