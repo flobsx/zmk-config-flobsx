@@ -186,8 +186,8 @@
             display-name = "Mouse";
             bindings = <
 &none        &none  &mkp MB4        &msc SCRL_UP    &mkp MB5         &none        &none      &mkp MB4         &mmv MOVE_UP    &mkp MB5         &none  &none
-&none        &none  &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_RIGHT  &none        &none      &mmv MOVE_LEFT   &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &none  &none
-&bootloader  &none  &kp K_COPY      &kp K_CUT       &kp K_PASTE      &none        &none      &kp LC(LS(TAB))  &kp LC(W)       &kp LC(TAB)      &none  &none
+&none        &kp LC(LS(TAB))  &msc SCRL_LEFT   &msc SCRL_DOWN  &msc SCRL_RIGHT  &none        &none      &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &kp LC(TAB)  &none
+&bootloader  &kp LC(Z)        &kp LC(C)        &kp LC(X)       &kp LC(V)        &none        &none      &kp LC(LS(TAB))  &kp LC(Z)      &kp LC(TAB)      &kp LC(LS(T))  &none
                                              &none           &none            &mkp LCLK    &mkp MCLK  &mkp RCLK        &none
             >;
         };
