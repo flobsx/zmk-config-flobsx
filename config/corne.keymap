@@ -237,7 +237,7 @@ HRMR(k1,k2,k3,k4) maps to:
 
 
         right_layer {
-            display-name = "❯❯------>";
+            display-name = "^ Upper ^";
             bindings = <
         //╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
         //│          │  *       │  1       │  2       │  3       │  +       │   │          │  HOME    │  UP      │  END     │  PAGE UP │          │
@@ -256,7 +256,7 @@ HRMR(k1,k2,k3,k4) maps to:
 
 
         left_layer {
-            display-name = "<------❮❮";
+            display-name = "v Lower v";
             bindings = <
         //╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
         //│          │  &       │  é       │  "       │  '       │  (       │   │  )       │  è       │  !       │  ç       │  à       │          │
@@ -275,7 +275,7 @@ HRMR(k1,k2,k3,k4) maps to:
 
 
         tri_layer {
-            display-name = "ˁ˚ᴥ˚ˀ";
+            display-name = "@( * O * )@";
             bindings = <
         //╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬───────────┬──────────┬──────────╮
         //│          │  F1      │  F2      │  F3      │  F4      │ PROFILE 0│   │ PROFILE 2│ DEC BR   │          │   INC BR  │  WINDOWS │          │
@@ -294,7 +294,7 @@ HRMR(k1,k2,k3,k4) maps to:
 
 
         mouse_layer {
-            display-name = "Mouse";
+            display-name = "MOUSE";
             bindings = <
 &none        &none            &mkp MB4         &msc SCRL_UP    &mkp MB5         &none        &none      &mkp MB4        &mmv MOVE_UP    &mkp MB5         &none  &none
 &none        &kp LC(LS(TAB))  &msc SCRL_LEFT   &msc SCRL_DOWN  &msc SCRL_RIGHT  &none        &none      &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &kp LC(TAB)  &none
