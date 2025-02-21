@@ -142,7 +142,7 @@
     keymap {
         compatible = "zmk,keymap";
 
-        default_layer {
+        base {
             display-name = "Base";
             bindings = <
 &kp ESC     &kp Q  &kp C  &kp O         &kp P         &kp W        &kp J      &kp M        &kp D    &kp SINGLE_QUOTE  &kp Y     &kp BSPC
@@ -182,7 +182,7 @@
             >;
         };
 
-        mouse_layer {
+        mouse {
             display-name = "Mouse";
             bindings = <
 &none        &none            &mkp MB4        &msc SCRL_UP    &mkp MB5         &none        &none      &mkp MB4         &mmv MOVE_UP    &mkp MB5         &none          &none
