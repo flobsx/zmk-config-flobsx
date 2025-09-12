@@ -1,0 +1,33 @@
+/* French letters */
+
+ZMK_UNICODE_PAIR(AGr,		    FR_0, FR_0,    E, FR_0,		FR_0, FR_0,    C, FR_0)	// à/À
+ZMK_UNICODE_PAIR(AE,	     	FR_0, FR_0,    E, FR_6,		FR_0, FR_0,    C, FR_6)	// æ/Æ
+ZMK_UNICODE_PAIR(OE,	    	FR_0, FR_1, FR_5, FR_3,		FR_0, FR_1, FR_5, FR_2)	// œ/Œ
+ZMK_UNICODE_PAIR(CCed,  		FR_0, FR_0,    E, FR_7,		FR_0, FR_0,    C, FR_7)	// ç/Ç
+ZMK_UNICODE_PAIR(EAig,  		FR_0, FR_0,    E, FR_9,		FR_0, FR_0,    C, FR_9)	// é/É
+ZMK_UNICODE_PAIR(EGr,		    FR_0, FR_0,    E, FR_8,		FR_0, FR_0,    C, FR_8)	// è/È
+ZMK_UNICODE_PAIR(UGr,	  	  FR_0, FR_0,    F, FR_9,		FR_0, FR_0,    D, FR_9)	// ù/Ù
+ZMK_UNICODE_PAIR(SqCb,	  	FR_0, FR_0,    B, FR_2,		FR_0, FR_0,    B, FR_3) // ²/³
+ZMK_UNICODE_PAIR(ExcBkS,  	FR_0, FR_0, FR_2, FR_1,		FR_0, FR_0, FR_5,    C) // !/
+ZMK_UNICODE_PAIR(LfPLfB,  	FR_0, FR_0, FR_2, FR_8,		FR_0, FR_0, FR_5,    B)	//
+ZMK_UNICODE_PAIR(RgPRgB,  	FR_0, FR_0, FR_2, FR_9,		FR_0, FR_0, FR_5,    D) //
+
+
+ZMK_UNICODE_SINGLE(Micro,	  FR_0, FR_0,    B, FR_5) // µ
+ZMK_UNICODE_SINGLE(Inf,	  	FR_0, FR_0, FR_3,    C) // <
+ZMK_UNICODE_SINGLE(Sup,		  FR_0, FR_0, FR_3,    E) // >
+ZMK_UNICODE_SINGLE(InfEg,	  FR_2, FR_2, FR_6, FR_4) // ≤
+ZMK_UNICODE_SINGLE(InfEg,  	FR_2, FR_2, FR_6, FR_4) // ≤
+ZMK_UNICODE_SINGLE(Slash,	  FR_0, FR_0, FR_2,    F) // /
+ZMK_UNICODE_SINGLE(BkSla,	  FR_0, FR_0, FR_5,    C) //
+ZMK_UNICODE_SINGLE(Pipe,  	FR_0, FR_0, FR_7,    C) // |
+ZMK_UNICODE_SINGLE(Excl,	  FR_0, FR_0, FR_2, FR_1) // !
+ZMK_UNICODE_SINGLE(InvQue,	FR_0, FR_0,    B,    F) // ¿
+ZMK_UNICODE_SINGLE(InvExl,	FR_0, FR_0, FR_A, FR_1) // ¡
+ZMK_UNICODE_SINGLE(Dollar,	FR_0, FR_0, FR_2, FR_4) // $
+ZMK_UNICODE_SINGLE(Perct,	  FR_0, FR_0, FR_2, FR_5) // %
+ZMK_UNICODE_SINGLE(Regist,	FR_0, FR_0, FR_A,    E) // ®
+ZMK_UNICODE_SINGLE(ArrowR,	FR_2, FR_1, FR_9, FR_2) // →
+ZMK_UNICODE_SINGLE(BakQut,	FR_0, FR_0, FR_6, FR_0) // `
+ZMK_UNICODE_SINGLE(Tilde, 	FR_0, FR_0, FR_7,    E) // ~
+ZMK_UNICODE_SINGLE(Deg,	  	FR_0, FR_0, FR_B, FR_0) // °
