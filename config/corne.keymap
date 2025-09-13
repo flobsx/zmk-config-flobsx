@@ -6,31 +6,133 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
-// #include "lib/keymap_french.h"
-// #include "lib/helper.h"
-// #include "lib/french_unicode.dtsi"
-// #include "lib/mouse.h"
 
+
+/*
+ * Here is a translation for all the French keys (AZERTY layout)
+ */
+
+#define FR_SUP2 GRAVE        // ²
+#define FR_AMPR N1           // &
+#define FR_EACU N2           // é
+#define FR_DQT N3            // "
+#define FR_SQT N4            // '
+#define FR_LPAR N5           // (
+#define FR_MINUS N6          // -
+#define FR_EGRV N7           // è
+#define FR_UNDS N8           // _
+#define FR_CCED N9           // ç
+#define FR_AGRV N0           // à
+#define FR_RPAR MINUS        // )
+#define FR_EQUAL EQUAL       // =
+#define FR_A Q               // A
+#define FR_Z W               // Z
+#define FR_E E               // E
+#define FR_R R               // R
+#define FR_T T               // T
+#define FR_Y Y               // Y
+#define FR_U U               // U
+#define FR_I I               // I
+#define FR_O O               // O
+#define FR_P P               // P
+#define FR_CIRC LBKT         // ^
+#define FR_DLR RBKT          // $
+#define FR_Q A               // Q
+#define FR_S S               // S
+#define FR_D D               // D
+#define FR_F F               // F
+#define FR_G G               // G
+#define FR_H H               // H
+#define FR_J J               // J
+#define FR_K K               // K
+#define FR_L L               // L
+#define FR_M SEMI            // M
+#define FR_UGRV SQT          // ù
+#define FR_AST NUHS          // *
+#define FR_LT NUBS           // <
+#define FR_W Z               // W
+#define FR_X X               // X
+#define FR_C C               // C
+#define FR_V V               // V
+#define FR_B B               // B
+#define FR_N N               // N
+#define FR_COMMA M           // .
+#define FR_SEMI COMMA        // ;
+#define FR_COLON DOT         // :
+#define FR_EXCL FSLH         // !
+#define FR_1 LS(FR_AMPR)     // 1
+#define FR_2 LS(FR_EACU)     // 2
+#define FR_3 LS(FR_DQT)      // 3
+#define FR_4 LS(FR_SQT)      // 4
+#define FR_5 LS(FR_LPAR)     // 5
+#define FR_6 LS(FR_MINUS)    // 6
+#define FR_7 LS(FR_EGRV)     // 7
+#define FR_8 LS(FR_UNDS)     // 8
+#define FR_9 LS(FR_CCED)     // 9
+#define FR_0 LS(FR_AGRV)     // 0
+#define FR_DEG LS(FR_RPAR)   // °
+#define FR_PLUS LS(FR_EQUAL) // +
+#define FR_DIAE LS(FR_CIRC)  // ¨
+#define FR_PND  LS(FR_DLR)   // £
+#define FR_PERC LS(FR_UGRV)  // %
+#define FR_MICR LS(FR_AST)   // µ
+#define FR_GT LS(FR_LT)      // >
+#define FR_QUES LS(FR_COMMA) // ?
+#define FR_DOT  LS(FR_SEMI)  // .
+#define FR_SLSH LS(FR_COLON) // /
+#define FR_SECT LS(FR_EXCL)  // §
+#define FR_TILD RA(FR_EACU)  // ~
+#define FR_HASH RA(FR_DQT)   // #
+#define FR_LBRC RA(FR_SQT)   // {
+#define FR_LBRK RA(FR_LPAR)  // [
+#define FR_PIPE RA(FR_MINUS) // |
+#define FR_GRV  RA(FR_EGRV)  // `
+#define FR_BSLS RA(FR_UNDS)  // (backslash)
+#define FR_AT   RA(FR_AGRV)  // @
+#define FR_RBRK RA(FR_RPAR)  // ]
+#define FR_RBRC RA(FR_EQUAL) // }
+#define FR_EURO RA(E)        // €
+#define FR_CURR RA(FR_DLR)   // ¤
+
+
+// Home row mods macro
+/*
+HRML(k1,k2,k3,k4) maps to:
+- k1 with Left Shift when held
+- k2 with Left Alt when held
+- k3 with Left Control when held
+- k4 with Left GUI (Windows/Command) when held
+*/
+#define HRML(k1,k2,k3,k4) &ht LSHIFT k1 &ht LALT k2  &ht LCTRL k3  &ht LGUI k4
+
+/*
+HRMR(k1,k2,k3,k4) maps to:
+- k1 with Right GUI when held
+- k2 with Right Control when held
+- k3 with Right Alt when held
+- k4 with Right Shift when held
+*/
+#define HRMR(k1,k2,k3,k4) &ht RGUI k1  &ht RCTRL k2  &ht RALT k3 &ht RSHIFT k4
+
+// Right Shift + Alt Gr
+#define RSA(k) RS(RA(k))
 
 // Layers name
+#define BAZ 0
 #define RIG 1
 #define LEF 2
 #define TRI 3
 #define MOUSE 4
 
-#define Default   0
-// #define NumArr    1
-// #define Unic      2
-// #define Fun       3
-// #define Media     4
-// #define Mouse     5
-// #define Gaming    6
 
-
+// Mouse settings
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 600  // default: 600
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 10    // default: 10
+#include <dt-bindings/zmk/pointing.h>
 
 
 / {
-    // behaviors {
+    behaviors {
 
         /*
         Hold-tap configuration for home row mods
@@ -59,73 +161,59 @@
     };
 
 
-    // combos {
-    //     compatible = "zmk,combos";
+    combos {
+        compatible = "zmk,combos";
 
-    //     // E + W => é
-    //     combo_e_acute {
-    //         timeout-ms = <50>;           // Délai court pour la détection
-    //         key-positions = <E T>;       // Positions des touches E et W
-    //         bindings = <&kp FR_EACU>;    // Output du é
-    //         require-prior-idle-ms = <100>;
-    //     };
+        // E + W => é
+        combo_e_acute {
+            timeout-ms = <50>;           // Délai court pour la détection
+            key-positions = <E W>;       // Positions des touches E et W
+            bindings = <&kp FR_EACU>;    // Output du é
+            require-prior-idle-ms = <100>;
+        };
 
-    //     // E + R => è
-    //     combo_e_agrave {
-    //         timeout-ms = <50>;           // Délai court pour la détection
-    //         key-positions = <E R>;       // Positions des touches E et R
-    //         bindings = <&kp FR_EGRV>;    // Output du è
-    //         require-prior-idle-ms = <100>;
-    //     };
-
-    //     // E + S => ê
-    //     combo_e_circumflex {
-    //         key-positions = <E S>;
-    //         timeout-ms = <50>;
-    //         bindings = <&kp FR_CIRC &kp E>;
-    //         require-prior-idle-ms = <150>;
-    //     };
-
-    //     // E + : => ê
-    //     combo_e_circumflex {
-    //         key-positions = <E FR_COLN>;
-    //         timeout-ms = <50>;
-    //         bindings = <&kp FR_DIAE &kp E>;
-    //         require-prior-idle-ms = <150>;
-    //     };
-
-    //     // O + E => œ
-    //     combo_e_acute {
-    //         timeout-ms = <50>;           // Délai court pour la détection
-    //         key-positions = <O E>;       // Positions des touches O et E
-    //         bindings = <&OE>;    // Output du œ
-    //         require-prior-idle-ms = <100>;
-    //     };
-
-    //     // Define combo for Space+Enter to toggle between main and fourth layer
-    //     toggle_fourth_layer {
-    //         key-positions = <38 39>;
-    //         timeout-ms = <50>;
-    //         bindings = <&tog MOUSE>;
-    //         // Prevent accidental activation
-    //         require-prior-idle-ms = <100>;
-    //         layers = <0 4>;  // Only active in layer 0 (default) and layer 4
-    //     };
-
-    // };
+        // E + R => è
+        combo_e_agrave {
+            timeout-ms = <50>;           // Délai court pour la détection
+            key-positions = <E R>;       // Positions des touches E et R
+            bindings = <&kp FR_EGRV>;    // Output du è
+            require-prior-idle-ms = <100>;
+        };
 
 
-    // conditional_layers {
+        // E + W + R => ê
+        combo_e_circumflex {
+            key-positions = <E W R>;
+            timeout-ms = <50>;
+            bindings = <&kp FR_CIRC &kp E>;
+            require-prior-idle-ms = <150>;
+        };
 
-    //     // Copy Enable third layer when both RIG and LEF layers are active
-    //     // This creates a tri-layer state for additional key mappings
-    //     compatible = "zmk,conditional-layers";
-    //     tri_layer {
-    //         if-layers = <RIG LEF>;
-    //         then-layer = <TRI>;
-    //     };
 
-    // };
+        // Define combo for Space+Enter to toggle between main and fourth layer
+        toggle_fourth_layer {
+            key-positions = <38 39>;
+            timeout-ms = <50>;
+            bindings = <&tog MOUSE>;
+            // Prevent accidental activation
+            require-prior-idle-ms = <100>;
+            layers = <0 4>;  // Only active in layer 0 (default) and layer 4
+        };
+
+    };
+
+
+    conditional_layers {
+
+        // Copy Enable third layer when both RIG and LEF layers are active
+        // This creates a tri-layer state for additional key mappings
+        compatible = "zmk,conditional-layers";
+        tri_layer {
+            if-layers = <RIG LEF>;
+            then-layer = <TRI>;
+        };
+
+    };
 
 
     keymap {
@@ -133,88 +221,88 @@
         default_layer {
             display-name = "=^_^=";
             bindings = <
-//╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
-//│  ESC     │  Z       │  J       │  O       │  B       │  !?      │   │  F       │  D       │  L       │  ★       │  X       │ BACKSPACE│
-  &kp ESC    &kp FR_Z   &kp FR_J   &kp FR_O   &kp FR_B   &kp FR_EXCL    &kp FR_F   &kp FR_D   &kp FR_L   &kp FR_STAR &kp FR_X   &kp BSPC
-//├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-//│  TAB     │  A       │  I       │  E       │  U       │  ,;      │   │  P       │  T       │  S       │  R       │  N       │  DELETE  │
-  &kp TAB    HRML( FR_A,   FR_I,      FR_E,      FR_U)   &kp FR_COMA    &kp FR_P   HRMR(FR_T,    FR_S,      FR_R,      FR_N)     &kp DEL
-//├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-//│          │  K       │  Y       │  Q       │  W       │  .:      │   │  G       │ C        │ M        │ H        │ V        │  -_      │
-  &kp LSHIFT  &kp Z      &kp X      &kp C      &kp V      &kp B         &kp FR_G     &kp FR_C &kp FR_M   &kp FR_H   &kp FR_V   &kp EQUAL
-//╰──────────┴──────────┴──────────┴──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┴──────────┴──────────┴──────────╯
-                                   &kp LSHIFT &lt LEF BSPC &kp SPACE    &kp ENTER  &lt RIG ESC &kp TAB
-//                                 ╰──────────┴──────────┴──────────╯   ╰──────────┴──────────┴──────────╯
+        //╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
+        //│  ESC     │  A       │  Z       │  E       │  R       │  T       │   │  Y       │  U       │  I       │  O       │  P       │ BACKSPACE│
+            &kp ESC     &kp Q      &kp W      &kp E      &kp R      &kp T          &kp Y      &kp U      &kp I      &kp O      &kp P      &kp BSPC
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│  TAB     │  Q       │  S       │  D       │  F       │  G       │   │  H       │  J       │  K       │  L       │  M       │  DELETE  │
+            &kp TAB     HRML( A,     S,         D,         F)       &kp G          &kp H      HRMR(J,        K,           L,    SEMI)     &kp DEL
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│          │  W       │  X       │  C       │  V       │  B       │   │  N       │ ,?       │ ;.       │ :/       │ =+       │  -_      │
+            &kp LSHIFT  &kp Z      &kp X      &kp C      &kp V      &kp B          &kp N     &kp M      &kp COMMA  &kp DOT    &kp FSLH    &kp EQUAL
+        //╰──────────┴──────────┴──────────┴──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┴──────────┴──────────┴──────────╯
+                                           &kp LSHIFT &lt LEF BSPC &kp SPACE     &kp ENTER  &lt RIG ESC &kp TAB
+        //                                 ╰──────────┴──────────┴──────────╯   ╰──────────┴──────────┴──────────╯
             >;
         };
 
 
-//         right_layer {
-//             display-name = "^ Upper ^";
-//             bindings = <
-//         //╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
-//         //│          │  *       │  1       │  2       │  3       │  +       │   │          │  HOME    │  UP      │  END     │  PAGE UP │          │
-//             &trans    &kp LS(RBKT) &kp EXCL   &kp AT     &kp HASH   &kp LS(FSLH)   &none      &kp HOME   &kp UARW   &kp END    &kp PG_UP  &trans
-//         //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-//         //│          │  /       │  4       │  5       │  6       │  -       │   │          │ LEFT     │ DOWN     │ RIGHT    │  PAGE DN            │
-//             &trans     &kp LS(DOT) &kp DLLR   &kp PRCNT  &kp CARET  &kp EQUAL      &none     &kp LARW   &kp DARW   &kp RARW    &kp PG_DN  &trans
-//         //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-//         //│          │  .       │  7       │  8       │  9       │  0       │   │          │          │  MENU    │          │          │          │
-//             &trans    &kp LS(COMMA) &kp AMPS  &kp ASTRK  &kp LPAR   &kp RPAR       &none      &none     &kp K_APP   &none      &none      &trans
-//         //╰──────────┴──────────┴──────────┴──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┴──────────┴──────────┴──────────╯
-//                                               &trans     &trans     &trans         &trans     &trans     &trans
-//         //                                 ╰──────────┴──────────┴──────────╯   ╰──────────┴──────────┴──────────╯
-//             >;
-//         };
+        right_layer {
+            display-name = "^ Upper ^";
+            bindings = <
+        //╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
+        //│          │  *       │  1       │  2       │  3       │  +       │   │          │  HOME    │  UP      │  END     │  PAGE UP │          │
+            &trans    &kp LS(RBKT) &kp EXCL   &kp AT     &kp HASH   &kp LS(FSLH)   &none      &kp HOME   &kp UARW   &kp END    &kp PG_UP  &trans
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│          │  /       │  4       │  5       │  6       │  -       │   │          │ LEFT     │ DOWN     │ RIGHT    │  PAGE DN            │
+            &trans     &kp LS(DOT) &kp DLLR   &kp PRCNT  &kp CARET  &kp EQUAL      &none     &kp LARW   &kp DARW   &kp RARW    &kp PG_DN  &trans
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│          │  .       │  7       │  8       │  9       │  0       │   │          │          │  MENU    │          │          │          │
+            &trans    &kp LS(COMMA) &kp AMPS  &kp ASTRK  &kp LPAR   &kp RPAR       &none      &none     &kp K_APP   &none      &none      &trans
+        //╰──────────┴──────────┴──────────┴──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┴──────────┴──────────┴──────────╯
+                                              &trans     &trans     &trans         &trans     &trans     &trans
+        //                                 ╰──────────┴──────────┴──────────╯   ╰──────────┴──────────┴──────────╯
+            >;
+        };
 
 
-//         left_layer {
-//             display-name = "v Lower v";
-//             bindings = <
-//         //╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
-//         //│          │  &       │  é       │  "       │  '       │  (       │   │  )       │  è       │  !       │  ç       │  à       │          │
-//             &trans      &kp N1     &kp N2     &kp N3     &kp N4     &kp N5        &kp MINUS   &kp N7     &kp N8     &kp N9     &kp N0     &trans
-//         //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-//         //│          │  `       │  /       │  #       │  @       │  {       │   │  }       │   _      │ ^        │  |       │  $       │          │
-//             &trans      HRML(BSLH, LS(DOT),   LS(NUBS),  NUBS)     &kp RA(N5)  &kp RA(MINUS) HRMR(LS(EQUAL), LBKT,  RSA(L),    RBKT)      &trans
-//         //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-//         //│          │  ù       │  \       │   <      │  >       │  [       │   │  ]       │  ~       │  %       │   °      │  €       │          │
-//             &trans    &kp SQT &kp RSA(DOT) &kp GRAVE &kp LS(GRAVE) &kp RSA(N5) &kp RSA(MINUS) &kp RA(N) &kp LS(SQT) &kp LS(MINUS) &kp RA(RBKT) &trans
-//         //╰──────────┴──────────┴──────────┴──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┴──────────┴──────────┴──────────╯
-//                                               &trans     &trans     &trans         &trans     &trans     &trans
-//         //                                 ╰──────────┴──────────┴──────────╯   ╰──────────┴──────────┴──────────╯
-//             >;
-//         };
+        left_layer {
+            display-name = "v Lower v";
+            bindings = <
+        //╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
+        //│          │  &       │  é       │  "       │  '       │  (       │   │  )       │  è       │  !       │  ç       │  à       │          │
+            &trans      &kp N1     &kp N2     &kp N3     &kp N4     &kp N5        &kp MINUS   &kp N7     &kp N8     &kp N9     &kp N0     &trans
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│          │  `       │  /       │  #       │  @       │  {       │   │  }       │   _      │ ^        │  |       │  $       │          │
+            &trans      HRML(BSLH, LS(DOT),   LS(NUBS),  NUBS)     &kp RA(N5)  &kp RA(MINUS) HRMR(LS(EQUAL), LBKT,  RSA(L),    RBKT)      &trans
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+        //│          │  ù       │  \       │   <      │  >       │  [       │   │  ]       │  ~       │  %       │   °      │  €       │          │
+            &trans    &kp SQT &kp RSA(DOT) &kp GRAVE &kp LS(GRAVE) &kp RSA(N5) &kp RSA(MINUS) &kp RA(N) &kp LS(SQT) &kp LS(MINUS) &kp RA(RBKT) &trans
+        //╰──────────┴──────────┴──────────┴──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┴──────────┴──────────┴──────────╯
+                                              &trans     &trans     &trans         &trans     &trans     &trans
+        //                                 ╰──────────┴──────────┴──────────╯   ╰──────────┴──────────┴──────────╯
+            >;
+        };
 
 
-//         tri_layer {
-//             display-name = "@( * O * )@";
-//             bindings = <
-//         //╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬───────────┬──────────┬──────────╮
-//         //│          │  F1      │  F2      │  F3      │  F4      │ PROFILE 0│   │ PROFILE 2│ DEC BR   │          │   INC BR  │  WINDOWS │          │
-//             &trans     &kp F1     &kp F2     &kp F3     &kp F4   &bt BT_SEL 0   &bt BT_SEL 2 &kp C_BRI_DEC &none &kp C_BRI_UP  &kp C_AC_DESKTOP_SHOW_ALL_WINDOWS     &trans
-//         //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼───────────┼──────────┼──────────┤
-//         //│          │  F5      │  F6      │  F7      │  F8      │ PROFILE 1│   │ PROFILE 3│ VOL DOWN │ VOL MUTE │  VOL UP   │  APPS    │          │
-//             &trans     &kp F5     &kp F6     &kp F7     &kp F8   &bt BT_SEL 1   &bt BT_SEL 3 &kp C_VOL_DN &kp C_MUTE &kp C_VOL_UP &kp C_AC_DESKTOP_SHOW_ALL_APPLICATIONS   &trans
-//         //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼───────────┼──────────┼──────────┤
-//         //│          │  F9      │  F10     │  F11     │  F12     │  CLEAR BT│   │ PROFILE 4│ PREVSONG │ PLAY PAU |  NEXTSONG │  SEARCH
-//             &trans     &kp F9     &kp F10    &kp F11    &kp F12    &bt BT_CLR   &bt BT_SEL 4 &kp C_PREV &kp C_PP   &kp C_NEXT &kp C_AC_SEARCH  &trans
-//         //╰──────────┴──────────┴──────────┴──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┴───────────┴──────────┴──────────╯
-//                                               &trans     &trans     &trans         &trans     &trans     &trans
-//         //                                 ╰──────────┴──────────┴──────────╯   ╰──────────┴──────────┴──────────╯
-//             >;
-//         };
+        tri_layer {
+            display-name = "@( * O * )@";
+            bindings = <
+        //╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬───────────┬──────────┬──────────╮
+        //│          │  F1      │  F2      │  F3      │  F4      │ PROFILE 0│   │ PROFILE 2│ DEC BR   │          │   INC BR  │  WINDOWS │          │
+            &trans     &kp F1     &kp F2     &kp F3     &kp F4   &bt BT_SEL 0   &bt BT_SEL 2 &kp C_BRI_DEC &none &kp C_BRI_UP  &kp C_AC_DESKTOP_SHOW_ALL_WINDOWS     &trans
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼───────────┼──────────┼──────────┤
+        //│          │  F5      │  F6      │  F7      │  F8      │ PROFILE 1│   │ PROFILE 3│ VOL DOWN │ VOL MUTE │  VOL UP   │  APPS    │          │
+            &trans     &kp F5     &kp F6     &kp F7     &kp F8   &bt BT_SEL 1   &bt BT_SEL 3 &kp C_VOL_DN &kp C_MUTE &kp C_VOL_UP &kp C_AC_DESKTOP_SHOW_ALL_APPLICATIONS   &trans
+        //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼───────────┼──────────┼──────────┤
+        //│          │  F9      │  F10     │  F11     │  F12     │  CLEAR BT│   │ PROFILE 4│ PREVSONG │ PLAY PAU |  NEXTSONG │  SEARCH
+            &trans     &kp F9     &kp F10    &kp F11    &kp F12    &bt BT_CLR   &bt BT_SEL 4 &kp C_PREV &kp C_PP   &kp C_NEXT &kp C_AC_SEARCH  &trans
+        //╰──────────┴──────────┴──────────┴──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┴───────────┴──────────┴──────────╯
+                                              &trans     &trans     &trans         &trans     &trans     &trans
+        //                                 ╰──────────┴──────────┴──────────╯   ╰──────────┴──────────┴──────────╯
+            >;
+        };
 
 
-//         mouse_layer {
-//             display-name = "MOUSE";
-//             bindings = <
-// &none        &none            &mkp MB4         &msc SCRL_UP    &mkp MB5         &none        &none      &mkp MB4        &mmv MOVE_UP    &mkp MB5         &none  &none
-// &none        &kp LC(LS(TAB))  &msc SCRL_LEFT   &msc SCRL_DOWN  &msc SCRL_RIGHT  &none        &none      &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &kp LC(TAB)  &none
-// &bootloader  &kp LC(Z)        &kp LC(C)        &kp LC(X)       &kp LC(V)        &none        &none      &kp LC(LS(TAB))  &kp LC(Z)      &kp LC(TAB)      &kp LC(LS(T))  &none
-//                                      &none           &none            &mkp LCLK    &mkp MCLK  &mkp RCLK       &none
-//             >;
-//         };
+        mouse_layer {
+            display-name = "MOUSE";
+            bindings = <
+&none        &none            &mkp MB4         &msc SCRL_UP    &mkp MB5         &none        &none      &mkp MB4        &mmv MOVE_UP    &mkp MB5         &none  &none
+&none        &kp LC(LS(TAB))  &msc SCRL_LEFT   &msc SCRL_DOWN  &msc SCRL_RIGHT  &none        &none      &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &kp LC(TAB)  &none
+&bootloader  &kp LC(Z)        &kp LC(C)        &kp LC(X)       &kp LC(V)        &none        &none      &kp LC(LS(TAB))  &kp LC(Z)      &kp LC(TAB)      &kp LC(LS(T))  &none
+                                     &none           &none            &mkp LCLK    &mkp MCLK  &mkp RCLK       &none
+            >;
+        };
 
     };
 };
