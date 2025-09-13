@@ -1,9 +1,30 @@
-# ZMK Config Corne Optimot Custom
+# ZMK Config - Wireless Corne Optimot Custom
 
-## keyboard-layout-editor
+## Usefull links
 
-### Permalinks
+- [ZMK Documentation](https://zmk.dev/docs/)
+- [ZMK Config Reference](https://zmk.dev/docs/config/)
+- [ZMK Studio](https://zmk.dev/docs/studio/)
+- [Keymap Editor](https://nickcoutsos.github.io/keymap-editor/)
+- [Keyboard Layout Editor](http://www.keyboard-layout-editor.com/)
+- <https://github.com/MajykOyster/zmk-config-klor/tree/master>
+
+## keyboard-layout-editor permalinks
 
 | Description | Link |
 |---|---|
-| Main Layer | https://keyboard-layout-editor.com/##@@_x:3&a:5&fa@:0&:0&:0&:0&:0&:0&:5%3B%3B&=%0A%C5%93%0A%0A%0A%0A%0Ao&_x:7&a:7&fa@:5%3B%3B&=l%3B&@_y:-0.75&x:2%3B&=j&_x:1%3B&=b&_x:5%3B&=d&_x:1%3B&=%E2%98%85%3B&@_y:-0.75&fa@:9%3B%3B&=%E2%90%9B&_fa@:5%3B%3B&=z&_x:3%3B&=%3F&_x:3%3B&=f&_x:3%3B&=x&=%3B&@_y:-0.5&x:3%3B&=e&_x:7%3B&=s%3B&@_y:-0.75&x:2%3B&=i&_x:1%3B&=u&_x:5%3B&=t&_x:1%3B&=r%3B&@_y:-0.75&fa@:9%3B%3B&=%E2%86%B9&_fa@:5%3B%3B&=a&_x:3&a:5&fa@:0&:0&:0&:0&:0&:0&:5%3B%3B&=%2F%3B%0A%0A%0A%0A%0A%0A,&_x:3&a:7&fa@:5%3B%3B&=p&_x:3%3B&=n&=%3B&@_y:-0.5&x:3%3B&=q&_x:7%3B&=m%3B&@_y:-0.75&x:2%3B&=y&_x:1&a:5&fa@:0&:0&:0&:0&:0&:0&:5%3B%3B&=%2F:%0A%0A%0A%0A%0A%0A.&_x:5&a:7&fa@:5%3B%3B&=c&_x:1%3B&=h%3B&@_y:-0.75&fa@:9%3B%3B&=%E2%87%A7&_fa@:5%3B%3B&=k&_x:3%3B&=w&_x:3%3B&=g&_x:3%3B&=v&_fa@:9%3B%3B&=%E2%87%A7%3B&@_y:-0.04999999999999982&x:3.5&fa@:5%3B%3B&=%E2%9C%B4%EF%B8%8F&_x:6%3B&=%3B&@_r:15&rx:4.75&ry:3.75&y:-0.2999999999999998%3B&=%E2%8C%AB%3B&@_r:25&rx:5.75&y:-0.5499999999999998&x:0.25&fa@:9%3B&h:1.5%3B&=%E2%90%A3%3B&@_r:-25&rx:9.5&y:-0.6499999999999999&x:-1.4499999999999993&h:1.5%3B&=%E2%86%A9%3B&@_r:-15&rx:10.5&y:-0.3500000000000001&x:-1.25&fa@:5%3B%3B&=%E2%8C%A6 |
+| Main Layer | <https://keyboard-layout-editor.com/##@@_x:3&a:5&fa@:0&:0&:0&:0&:0&:0&:5%3B%3B&=%0A%C5%93%0A%0A%0A%0A%0Ao&_x:7&a:7&fa@:5%3B%3B&=l%3B&@_y:-0.75&x:2%3B&=j&_x:1%3B&=b&_x:5%3B&=d&_x:1%3B&=%E2%98%85%3B&@_y:-0.75&fa@:9%3B%3B&=%E2%90%9B&_fa@:5%3B%3B&=z&_x:3%3B&=%3F&_x:3%3B&=f&_x:3%3B&=x&=%3B&@_y:-0.5&x:3%3B&=e&_x:7%3B&=s%3B&@_y:-0.75&x:2%3B&=i&_x:1%3B&=u&_x:5%3B&=t&_x:1%3B&=r%3B&@_y:-0.75&fa@:9%3B%3B&=%E2%86%B9&_fa@:5%3B%3B&=a&_x:3&a:5&fa@:0&:0&:0&:0&:0&:0&:5%3B%3B&=%2F%3B%0A%0A%0A%0A%0A%0A,&_x:3&a:7&fa@:5%3B%3B&=p&_x:3%3B&=n&=%3B&@_y:-0.5&x:3%3B&=q&_x:7%3B&=m%3B&@_y:-0.75&x:2%3B&=y&_x:1&a:5&fa@:0&:0&:0&:0&:0&:0&:5%3B%3B&=%2F:%0A%0A%0A%0A%0A%0A.&_x:5&a:7&fa@:5%3B%3B&=c&_x:1%3B&=h%3B&@_y:-0.75&fa@:9%3B%3B&=%E2%87%A7&_fa@:5%3B%3B&=k&_x:3%3B&=w&_x:3%3B&=g&_x:3%3B&=v&_fa@:9%3B%3B&=%E2%87%A7%3B&@_y:-0.04999999999999982&x:3.5&fa@:5%3B%3B&=%E2%9C%B4%EF%B8%8F&_x:6%3B&=%3B&@_r:15&rx:4.75&ry:3.75&y:-0.2999999999999998%3B&=%E2%8C%AB%3B&@_r:25&rx:5.75&y:-0.5499999999999998&x:0.25&fa@:9%3B&h:1.5%3B&=%E2%90%A3%3B&@_r:-25&rx:9.5&y:-0.6499999999999999&x:-1.4499999999999993&h:1.5%3B&=%E2%86%A9%3B&@_r:-15&rx:10.5&y:-0.3500000000000001&x:-1.25&fa@:5%3B%3B&=%E2%8C%A6> |
+
+## Build in local
+
+Initial setup:
+
+```sh
+brew install west
+```
+
+Build:
+
+```sh
+make
+```
