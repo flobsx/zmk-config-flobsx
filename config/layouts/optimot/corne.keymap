@@ -133,7 +133,6 @@ HRMR(k1,k2,k3,k4) maps to:
 
 / {
     behaviors {
-
         #include "common/layers/behaviours.dtsi"
     };
 
@@ -154,4 +153,3 @@ HRMR(k1,k2,k3,k4) maps to:
         #include "common/layers/mouse.dtsi"
     };
 };
-
