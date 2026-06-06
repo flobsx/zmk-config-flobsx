@@ -3,9 +3,8 @@
 This repository is a **ZMK firmware configuration** for a wireless split Corne keyboard
 (Corne v2, 42-key variant). It defines the keymap, hardware
 behaviours, Bluetooth settings, and OLED display configuration. Pushing to GitHub triggers
-an Actions workflow that compiles `.uf2` firmware images for the left and right halves;
-the owner currently downloads those artefacts and flashes them manually. Local builds are
-**not yet wired up** in this repo.
+an Actions workflow that compiles `.uf2` firmware images for the left and right halves.
+Local builds are also supported via a `Makefile` that calls `west build` directly.
 
 ---
 
@@ -16,18 +15,24 @@ the owner currently downloads those artefacts and flashes them manually. Local b
 ├── .github/workflows/build.yml   # CI: calls the upstream ZMK reusable workflow
 ├── build.yaml                    # Build-matrix: left/right half + nice_view shields
 ├── config/
+│   ├── corne.keymap              # GENERATED — do not edit (copied from layouts/<name>/corne.keymap)
 │   ├── corne.conf                # Zephyr / ZMK runtime Kconfig (sleep, BT power, debounce, Studio)
-│   ├── corne.keymap              # Main keymap: includes & orchestrates layer / combo / behaviour files
 │   ├── west.yml                  # West manifest: pins ZMK firmware v0.3
-│   └── layers/                   # One file per layer / behaviour group (included by corne.keymap)
-│       ├── behaviours.dtsi       # Hold-tap behaviour definition
-│       ├── combos.dtsi           # Combos (é, è, ê, toggle mouse)
-│       ├── conditional.dtsi      # Tri-layer conditional rule
-│       ├── default.dtsi          # Base layer
-│       ├── right.dtsi            # Upper layer (symbols / nav)
-│       ├── left.dtsi             # Lower layer (French AZERTY accents)
-│       ├── tri.dtsi              # Adjust layer (F-keys, BT, media)
-│       └── mouse.dtsi            # Mouse / pointing layer
+│   ├── common/                   # Shared layers & behaviours used by all layouts
+│   │   └── layers/
+│   │       ├── behaviours.dtsi   # Hold-tap behaviour definition
+│   │       ├── conditional.dtsi  # Tri-layer conditional rule
+│   │       ├── tri.dtsi          # Adjust layer (F-keys, BT, media)
+│   │       └── mouse.dtsi        # Mouse / pointing layer
+│   └── layouts/                  # One folder per keyboard layout
+│       └── optimot/              # French AZERTY Optimot layout (current default)
+│           ├── corne.keymap      # Layout master: defines which includes to use
+│           ├── corne.conf        # Layout-specific Kconfig overrides
+│           └── layers/
+│               ├── combos.dtsi   # Combos (é, è, ê, toggle mouse)
+│               ├── default.dtsi  # Base layer
+│               ├── right.dtsi    # Upper layer (symbols / nav)
+│               └── left.dtsi     # Lower layer (French AZERTY accents)
 ├── .vscode/
 │   ├── lib/
 │   │   ├── helper.h              # Re-usable macros (hold-tap, combos, layers, unicode)
@@ -41,8 +46,10 @@ the owner currently downloads those artefacts and flashes them manually. Local b
 └── README.md                     # Human docs: links, layout editor permalinks, local-build hints
 ```
 
-**Key take-away for agents:** every keymap change happens in `config/corne.keymap`.
-Helper macros live under `.vscode/lib/` (currently **gitignored** – see *Agent Guardrails*).
+**Key take-away for agents:**
+- `config/layouts/<name>/corne.keymap` is the **source of truth** for each layout. It decides which `#include` to pull (from `common/` or from its own `layers/`).
+- `config/corne.keymap` is **generated** by `make` (copied from the chosen layout). **Never edit it directly.**
+- To add a new layout (e.g. `ergol`), create `config/layouts/ergol/` with its own `corne.keymap` and `layers/`.
 
 ---
 
@@ -60,21 +67,29 @@ git push origin <branch>
 # 1. First time only — initialise the Zephyr workspace
 make setup
 
-# 2. Build
+# 2. Build (default layout: optimot)
 make          # show available commands & quick-start guide
 make left     # left half only
 make right    # right half only
 make all      # both halves
 make clean    # remove build artefacts
 
+# 2b. Build a different layout
+make LAYOUT=ergol all     # build both halves with ergol layout
+make LAYOUT=ergol left    # left half only, ergol layout
+
 # 3. Flash
 make flash-info   # show copy-paste flashing instructions
-# Then copy firmware/corne_left.uf2 or firmware/corne_right.uf2
+# Then copy firmware/optimot_corne_left.uf2 or firmware/optimot_corne_right.uf2
 # to the USB mass-storage drive that appears after double-tap RESET.
 ```
 
 ### Manual west build (experts)
 ```bash
+# 1. Generate the keymap first
+make generate-keymap LAYOUT=optimot
+
+# 2. Build
 west build -s zmk/app -d build/left -b nice_nano_v2 -S studio-rpc-usb-uart -- \
   -DZMK_CONFIG="$(pwd)/config" \
   -DSHIELD="corne_left nice_view_adapter nice_view" \
@@ -185,6 +200,7 @@ positions to French AZERTY output, including dead keys and AltGr symbols.
 | **Do NOT move or rename `.vscode/lib/` files without updating `#include` paths in `corne.keymap`.** | The project currently relies on this gitignored directory. |
 | **When editing a layer, modify the matching `.dtsi` in `config/layers/` — never inline it back into `corne.keymap`.** | The split-file layout is intentional for maintainability. |
 | **Keep layer file names in sync with their node names** (e.g. `default.dtsi` ↔ `default_layer`). | Makes it obvious which file to open for a given layer. |
+| **Do NOT edit `config/corne.keymap` directly.** | It is generated by `make` from `config/layouts/<name>/corne.keymap`. Always edit the source. |
 | **Always preserve the ASCII layout comments** inside each layer definition. | They are the only human-readable reference of the layout. |
 | **When adding a new layer**, follow the existing pattern: numeric `#define`, `display-name`, ASCII art header, then bindings. | Keeps the file consistent and readable. |
 | **Verify Devicetree syntax after edits.** | A missing `&` or `>` silently breaks the firmware. |
