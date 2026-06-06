@@ -67,20 +67,19 @@ git push origin <branch>
 # 1. First time only — initialise the Zephyr workspace
 make setup
 
-# 2. Build (default layout: optimot)
-make          # show available commands & quick-start guide
+# 2. Select layout (default: optimot)
+make layout          # interactive selection via fzf
+make LAYOUT=ergol    # one-shot build with a specific layout
+
+# 3. Build
 make left     # left half only
 make right    # right half only
 make all      # both halves
 make clean    # remove build artefacts
 
-# 2b. Build a different layout
-make LAYOUT=ergol all     # build both halves with ergol layout
-make LAYOUT=ergol left    # left half only, ergol layout
-
-# 3. Flash
+# 4. Flash
 make flash-info   # show copy-paste flashing instructions
-# Then copy firmware/optimot_corne_left.uf2 or firmware/optimot_corne_right.uf2
+# Then copy firmware/<layout>_corne_left.uf2 or firmware/<layout>_corne_right.uf2
 # to the USB mass-storage drive that appears after double-tap RESET.
 ```
 
