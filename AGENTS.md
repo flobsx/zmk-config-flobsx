@@ -67,11 +67,14 @@ git push origin <branch>
 # 1. First time only — initialise the Zephyr workspace
 make setup
 
-# 2. Select layout (default: optimot)
-make layout          # interactive selection via fzf
-make LAYOUT=ergol    # one-shot build with a specific layout
+# 2. Create a new layout
+make new          # interactive wizard to scaffold a new layout
 
-# 3. Build
+# 3. Select layout (default: optimot)
+make layout       # interactive selection via fzf
+make LAYOUT=ergol # one-shot build with a specific layout
+
+# 4. Build
 make left     # left half only
 make right    # right half only
 make all      # both halves

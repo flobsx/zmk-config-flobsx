@@ -40,37 +40,10 @@ EXTRA_MODULES := $(PWD)
 KEYMAP_SRC   := $(CONFIG_DIR)/layouts/$(LAYOUT)/corne.keymap
 KEYMAP_DST   := $(CONFIG_DIR)/corne.keymap
 
-.PHONY: help all left right setup clean flash-info generate-keymap layout
+.PHONY: help all left right setup clean flash-info generate-keymap layout new
 
 help:
-	@echo ""
-	@echo "$(CYAN)╔══════════════════════════════════════════════════════════════╗$(RESET)"
-	@echo "$(CYAN)║$(RESET)  $(BOLD)ZMK Config — Local build helper$(RESET)                             $(CYAN)║$(RESET)"
-	@echo "$(CYAN)╠══════════════════════════════════════════════════════════════╣$(RESET)"
-	@echo "$(CYAN)║$(RESET)  Compiles firmware for a wireless split Corne keyboard      $(CYAN)║$(RESET)"
-	@echo "$(CYAN)║$(RESET)  using Zephyr / ZMK tooling.                                $(CYAN)║$(RESET)"
-	@echo "$(CYAN)╠══════════════════════════════════════════════════════════════╣$(RESET)"
-	@echo "$(CYAN)║$(RESET)  $(BOLD)Available commands:$(RESET)                                          $(CYAN)║$(RESET)"
-	@echo "$(CYAN)║$(RESET)    $(GREEN)make setup$(RESET)     initialise west workspace (run once)       $(CYAN)║$(RESET)"
-	@echo "$(CYAN)║$(RESET)    $(GREEN)make layout$(RESET)    choose layout via $(BOLD)fzf$(RESET) (interactive)       $(CYAN)║$(RESET)"
-	@echo "$(CYAN)║$(RESET)    $(GREEN)make left$(RESET)      build left half                              $(CYAN)║$(RESET)"
-	@echo "$(CYAN)║$(RESET)    $(GREEN)make right$(RESET)     build right half                             $(CYAN)║$(RESET)"
-	@echo "$(CYAN)║$(RESET)    $(GREEN)make all$(RESET)       build both halves                            $(CYAN)║$(RESET)"
-	@echo "$(CYAN)║$(RESET)    $(GREEN)make clean$(RESET)     remove build directories                     $(CYAN)║$(RESET)"
-	@echo "$(CYAN)║$(RESET)    $(GREEN)make flash-info$(RESET)  show flashing instructions                   $(CYAN)║$(RESET)"
-	@echo "$(CYAN)╚══════════════════════════════════════════════════════════════╝$(RESET)"
-	@echo ""
-	@echo "$(YELLOW)Current layout:$(RESET) $(BOLD)$(LAYOUT)$(RESET)"
-	@echo ""
-	@echo "$(GRAY)Build a specific layout:$(RESET)"
-	@echo "  $(CYAN)make layout$(RESET)                 $(GRAY)# interactive selection via fzf$(RESET)"
-	@echo "  $(CYAN)make LAYOUT=ergol all$(RESET)         $(GRAY)# one-shot build with a layout$(RESET)"
-	@echo ""
-	@echo "$(BOLD)Quick start:$(RESET)"
-	@echo "  1. $(GREEN)make setup$(RESET)"
-	@echo "  2. $(GREEN)make layout$(RESET)"
-	@echo "  3. $(GREEN)make all$(RESET)          $(GRAY)# or: make left / make right$(RESET)"
-	@echo "  4. $(GREEN)make flash-info$(RESET)"
+	@LAYOUT="$(LAYOUT)" scripts/box.sh
 
 layout:
 	@echo "$(CYAN)==>$(RESET) Select a keyboard layout with $(BOLD)fzf$(RESET)..."
@@ -133,3 +106,6 @@ flash-info:
 	@echo "  3. Copy the matching $(BOLD).uf2$(RESET) file to that drive:"
 	@echo "     $(GREEN)→$(RESET) Left half : $(CYAN)$(FIRMWARE_DIR)/$(LAYOUT)_corne_left.uf2$(RESET)"
 	@echo "     $(GREEN)→$(RESET) Right half: $(CYAN)$(FIRMWARE_DIR)/$(LAYOUT)_corne_right.uf2$(RESET)"
+
+new:
+	@scripts/new-layout.sh $(CONFIG_DIR)
