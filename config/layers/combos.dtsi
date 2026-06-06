@@ -1,0 +1,33 @@
+    // E + W => é
+    combo_e_acute {
+        timeout-ms = <50>;           // Délai court pour la détection
+        key-positions = <E W>;       // Positions des touches E et W
+        bindings = <&kp FR_EACU>;    // Output du é
+        require-prior-idle-ms = <100>;
+    };
+
+    // E + R => è
+    combo_e_agrave {
+        timeout-ms = <50>;           // Délai court pour la détection
+        key-positions = <E R>;       // Positions des touches E et R
+        bindings = <&kp FR_EGRV>;    // Output du è
+        require-prior-idle-ms = <100>;
+    };
+
+    // E + W + R => ê
+    combo_e_circumflex {
+        key-positions = <E W R>;
+        timeout-ms = <50>;
+        bindings = <&kp FR_CIRC &kp E>;
+        require-prior-idle-ms = <150>;
+    };
+
+    // Define combo for Space+Enter to toggle between main and fourth layer
+    toggle_fourth_layer {
+        key-positions = <38 39>;
+        timeout-ms = <50>;
+        bindings = <&tog MOUSE>;
+        // Prevent accidental activation
+        require-prior-idle-ms = <100>;
+        layers = <0 4>;  // Only active in layer 0 (default) and layer 4
+    };

@@ -1,0 +1,16 @@
+        // Define a new hold-tap behavior named "ht"
+        ht: hold_tap {
+            // Label for identification
+            label = "hold_tap";
+            // Specify this is a ZMK hold-tap behavior
+            compatible = "zmk,behavior-hold-tap";
+            // Number of binding parameters required (hold binding and tap binding)
+            #binding-cells = <2>;
+            bindings = <&kp>, <&kp>;
+            // Prefer tap action over hold when timing is ambiguous
+            flavor = "tap-preferred";
+            // Time in milliseconds to determine between tap and hold (220ms)
+            tapping-term-ms = <220>;
+            // Allow quick tap within 150ms to repeat the tap action
+            quick-tap-ms = <150>;
+        };
