@@ -80,10 +80,14 @@ make right    # right half only
 make all      # both halves
 make clean    # remove build artefacts
 
-# 4. Flash
+# 5. Flash
 make flash-info   # show copy-paste flashing instructions
 # Then copy firmware/<layout>_corne_left.uf2 or firmware/<layout>_corne_right.uf2
 # to the USB mass-storage drive that appears after double-tap RESET.
+
+### Prerequisites
+- `uv` (Python package manager): https://docs.astral.sh/uv/getting-started/installation/
+- `west` is installed automatically in the `.venv` by the Makefile
 ```
 
 ### Manual west build (experts)
