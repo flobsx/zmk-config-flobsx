@@ -20,11 +20,20 @@
 Initial setup:
 
 ```sh
-brew install west
+# Requires uv (https://docs.astral.sh/uv/getting-started/installation/)
+make setup
 ```
 
 Build:
 
 ```sh
-make
+make all
+```
+
+Flash (interactive — auto-detects bootloader):
+
+```sh
+make copy          # flash left, wait for switch, flash right
+make copy-left     # flash left half only
+make copy-right    # flash right half only
 ```

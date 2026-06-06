@@ -2,9 +2,8 @@
 
 This repository is a **ZMK firmware configuration** for a wireless split Corne keyboard
 (Corne v2, 42-key variant). It defines the keymap, hardware
-behaviours, Bluetooth settings, and OLED display configuration. Pushing to GitHub triggers
-an Actions workflow that compiles `.uf2` firmware images for the left and right halves.
-Local builds are also supported via a `Makefile` that calls `west build` directly.
+behaviours, Bluetooth settings, and OLED display configuration.
+Local builds are supported via a `Makefile` that calls `west build` directly.
 
 ---
 
@@ -12,7 +11,6 @@ Local builds are also supported via a `Makefile` that calls `west build` directl
 
 ```
 .
-├── .github/workflows/build.yml   # CI: calls the upstream ZMK reusable workflow
 ├── build.yaml                    # Build-matrix: left/right half + nice_view shields
 ├── config/
 │   ├── corne.keymap              # GENERATED — do not edit (copied from layouts/<name>/corne.keymap)
@@ -55,13 +53,6 @@ Local builds are also supported via a `Makefile` that calls `west build` directl
 
 ## Build & Development Commands
 
-### Remote build (GitHub Actions)
-```bash
-# Push to any branch — GitHub Actions compiles both halves automatically.
-git push origin <branch>
-# Artefacts appear under the workflow run summary.
-```
-
 ### Local build (Makefile)
 ```bash
 # 1. First time only — initialise the Zephyr workspace
@@ -80,10 +71,11 @@ make right    # right half only
 make all      # both halves
 make clean    # remove build artefacts
 
-# 5. Flash
-make flash-info   # show copy-paste flashing instructions
-# Then copy firmware/<layout>_corne_left.uf2 or firmware/<layout>_corne_right.uf2
-# to the USB mass-storage drive that appears after double-tap RESET.
+# 5. Flash (interactive — auto-detects bootloader)
+make copy          # flash left, wait for switch, flash right
+make copy-left     # flash left half only
+make copy-right    # flash right half only
+make flash-info    # show manual flashing instructions
 
 ### Prerequisites
 - `uv` (Python package manager): https://docs.astral.sh/uv/getting-started/installation/
@@ -127,13 +119,13 @@ keys, `HRML` / `HRMR` for home-row mods).
 
 ```
 ┌─────────────────────┐     ┌─────────────────────┐     ┌─────────────────────┐
-│   Git Push / PR     │────▶│  GitHub Actions     │────▶│  Firmware artefacts │
-│                     │     │  build-user-config  │     │  (*.uf2 left/right) │
+│   make all          │────▶│  west build         │────▶│  Firmware binaries  │
+│                     │     │  (left + right)     │     │  (*.uf2 left/right) │
 └─────────────────────┘     └─────────────────────┘     └─────────────────────┘
                                     │
                                     ▼
                     ┌───────────────────────────────────────┐
-                    │  build.yaml matrix                    │
+                    │  Makefile                             │
                     │  nice_nano_v2 + corne_left/right      │
                     │  + nice_view_adapter + nice_view      │
                     │  + studio-rpc-usb-uart (left only)    │
@@ -171,8 +163,7 @@ positions to French AZERTY output, including dead keys and AltGr symbols.
 ## Testing Strategy
 
 * **No automated tests exist in this repo.**
-* **Validation method:** Push a branch and let the upstream ZMK GitHub Actions workflow compile
-  the firmware; a successful run proves the Devicetree syntax is valid.
+* **Validation method:** Run `make all` locally; a successful build proves the Devicetree syntax is valid.
 * **Manual QA:** Flash the new `.uf2` to each half and verify:
   1. All layers switch correctly.
   2. Home-row modifiers work as both tap (character) and hold (modifier).
@@ -202,7 +193,7 @@ positions to French AZERTY output, including dead keys and AltGr symbols.
 |------|-----------|
 | **Never delete or overwrite `config/corne.keymap` without a backup.** | This is the single source of truth for the layout. |
 | **Never delete `config/corne.conf` keys blindly** – comment out with `#` instead. | The owner toggles features (sleep, logging, BT power) regularly. |
-| **Do NOT commit new `.uf2` binaries.** | Use GitHub Actions artefacts; binaries bloat the repo. |
+| **Do NOT commit new `.uf2` binaries.** | Binaries bloat the repo; keep them in `firmware/` locally only. |
 | **Do NOT move or rename `.vscode/lib/` files without updating `#include` paths in `corne.keymap`.** | The project currently relies on this gitignored directory. |
 | **When editing a layer, modify the matching `.dtsi` in `config/layers/` — never inline it back into `corne.keymap`.** | The split-file layout is intentional for maintainability. |
 | **Keep layer file names in sync with their node names** (e.g. `default.dtsi` ↔ `default_layer`). | Makes it obvious which file to open for a given layer. |
@@ -210,7 +201,7 @@ positions to French AZERTY output, including dead keys and AltGr symbols.
 | **Always preserve the ASCII layout comments** inside each layer definition. | They are the only human-readable reference of the layout. |
 | **When adding a new layer**, follow the existing pattern: numeric `#define`, `display-name`, ASCII art header, then bindings. | Keeps the file consistent and readable. |
 | **Verify Devicetree syntax after edits.** | A missing `&` or `>` silently breaks the firmware. |
-| **Do NOT invent new build commands** unless a `Makefile` or `west` wrapper is actually added. | Currently only GitHub Actions is guaranteed to work. |
+| **Do NOT invent new build commands** unless a `Makefile` or `west` wrapper is actually added. |
 
 ---
 

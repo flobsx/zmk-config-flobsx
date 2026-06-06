@@ -7,6 +7,9 @@
 #   make all      → build both halves
 #   make clean    → remove build directories
 #   make flash-info → show flashing instructions
+#   make copy     → flash both halves (interactive)
+#   make copy-left  → flash left half only
+#   make copy-right → flash right half only
 #
 # To build a specific layout (default: optimot):
 #   make LAYOUT=optimot all
@@ -43,7 +46,7 @@ SNIPPET_LEFT := studio-rpc-usb-uart
 KEYMAP_SRC   := $(CONFIG_DIR)/layouts/$(LAYOUT)/corne.keymap
 KEYMAP_DST   := $(CONFIG_DIR)/corne.keymap
 
-.PHONY: help all left right setup clean flash-info generate-keymap layout new
+.PHONY: help all left right setup clean flash-info generate-keymap layout new copy copy-left copy-right
 
 help:
 	@LAYOUT="$(LAYOUT)" scripts/box.sh
@@ -56,6 +59,12 @@ layout:
 		{ echo "$(YELLOW)==>$(RESET) No layout selected. Keeping: $(BOLD)$(LAYOUT)$(RESET)"; }
 
 all: left right
+	@echo ""
+	@echo "$(BOLD)$(GREEN)════════════════════════════════════════════════════$(RESET)"
+	@echo "$(BOLD)$(GREEN)==> Build complete for layout: $(LAYOUT)$(RESET)"
+	@echo "$(GREEN)==> Left firmware : $(CYAN)$(FIRMWARE_DIR)/$(LAYOUT)_corne_left.uf2$(RESET)"
+	@echo "$(GREEN)==> Right firmware: $(CYAN)$(FIRMWARE_DIR)/$(LAYOUT)_corne_right.uf2$(RESET)"
+	@echo "$(BOLD)$(GREEN)════════════════════════════════════════════════════$(RESET)"
 
 generate-keymap:
 	@echo "$(CYAN)==>$(RESET) Generating keymap for layout: $(BOLD)$(LAYOUT)$(RESET)"
@@ -121,6 +130,26 @@ flash-info:
 	@echo "  3. Copy the matching $(BOLD).uf2$(RESET) file to that drive:"
 	@echo "     $(GREEN)→$(RESET) Left half : $(CYAN)$(FIRMWARE_DIR)/$(LAYOUT)_corne_left.uf2$(RESET)"
 	@echo "     $(GREEN)→$(RESET) Right half: $(CYAN)$(FIRMWARE_DIR)/$(LAYOUT)_corne_right.uf2$(RESET)"
+
+# ── Flash / Copy targets ──────────────────────────────────────────
+
+copy:
+	@$(MAKE) copy-left
+	@echo ""
+	@echo "$(CYAN)==>$(RESET) Left half done. $(BOLD)Switch USB cable to the RIGHT half now.${RESET}"
+	@echo "$(YELLOW)==>$(RESET) Double-tap RESET on the right half, then press $(BOLD)ENTER${RESET} to continue..."
+	@read -r _
+	@$(MAKE) copy-right
+	@echo ""
+	@echo "$(BOLD)$(GREEN)════════════════════════════════════════════════════$(RESET)"
+	@echo "$(BOLD)$(GREEN)==> Both halves flashed successfully!$(RESET)"
+	@echo "$(BOLD)$(GREEN)════════════════════════════════════════════════════$(RESET)"
+
+copy-left:
+	@scripts/copy-firmware.sh left $(FIRMWARE_DIR)/$(LAYOUT)_corne_left.uf2
+
+copy-right:
+	@scripts/copy-firmware.sh right $(FIRMWARE_DIR)/$(LAYOUT)_corne_right.uf2
 
 new:
 	@scripts/new-layout.sh $(CONFIG_DIR)

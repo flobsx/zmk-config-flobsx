@@ -10,11 +10,12 @@
 ## 2. Detailed Directory Structure Analysis
 
 ### Root Directory
-- **Purpose**: Contains build configuration, CI/CD setup, and project documentation
+- **Purpose**: Contains build configuration, local build scripts, and project documentation
 - **Key Files**:
-  - `build.yaml`: Defines the GitHub Actions build matrix for different board/shield combinations
-  - `.gitignore`: Excludes `.vscode` directory from version control
+  - `build.yaml`: Defines the local build matrix for different board/shield combinations
+  - `.gitignore`: Excludes `.vscode` directory and build artifacts from version control
   - `README.md`: Project documentation with links to ZMK resources and build instructions
+  - `Makefile`: Local build orchestration with west
 
 ### `config/` Directory
 - **Purpose**: Core keyboard configuration files
@@ -23,10 +24,11 @@
   - `corne.keymap`: Main keymap definition with French AZERTY layout, layers, and behaviors
   - `west.yml`: West manifest for dependency management (ZMK firmware source)
 
-### `.github/workflows/` Directory
-- **Purpose**: CI/CD automation
+### `scripts/` Directory
+- **Purpose**: Helper scripts for local development
 - **Key Files**:
-  - `build.yml`: GitHub Actions workflow that triggers builds on push/PR
+  - `box.sh`: Colored output helpers for Makefile
+  - `new-layout.sh`: Interactive wizard to scaffold new keyboard layouts
 
 ### `.vscode/` Directory
 - **Purpose**: IDE helpers and development utilities (not version-controlled)
@@ -96,11 +98,11 @@
 - **`zephyr/module.yml`**: Zephyr module configuration
   - Sets board root to current directory
 
-### DevOps
-- **`.github/workflows/build.yml`**: CI/CD pipeline
-  - Triggers on push, pull request, and manual dispatch
-  - Uses reusable workflow from ZMK firmware repository
-  - References workflow at v0.3 tag
+### Build Tools
+- **`Makefile`**: Local build orchestration
+  - Manages Python virtual environment with UV
+  - Calls west build for both left and right halves
+  - Generates keymap from selected layout before building
 
 ## 4. API Endpoints Analysis
 
@@ -116,10 +118,9 @@ This project follows the ZMK firmware architecture pattern:
 
 ### Data Flow and Request Lifecycle
 1. **Build Process**:
-   - GitHub Actions triggers on code changes
-   - West resolves dependencies (ZMK firmware)
-   - Zephyr build system compiles firmware for both halves
-   - Output: `.uf2` files ready for flashing
+   - `make setup` initialises the west workspace and Python environment
+   - `make all` generates the keymap and compiles both halves
+   - Zephyr build system produces `.uf2` files ready for flashing
 
 2. **Runtime Behavior**:
    - Key presses are processed through the ZMK behavior system
@@ -151,21 +152,20 @@ corne.keymap
 - None specifically required for this project
 
 ### Installation and Setup Process
-1. Install `west` build tool: `brew install west`
-2. Initialize west workspace: `west init -l config`
-3. Update dependencies: `west update`
-4. Build firmware: `make` (or use GitHub Actions)
+1. Install `uv` Python package manager
+2. Run `make setup` to initialise west workspace and Python environment
+3. Select layout: `make layout` (or `make LAYOUT=optimot`)
+4. Build firmware: `make all`
 
 ### Development Workflow
-1. Edit keymap in `config/corne.keymap`
+1. Edit keymap in `config/layouts/<name>/corne.keymap` (never edit `config/corne.keymap` directly)
 2. Adjust settings in `config/corne.conf` if needed
-3. Push changes to trigger GitHub Actions build
-4. Download compiled `.uf2` firmware from GitHub Actions artifacts
-5. Flash firmware to keyboard halves
+3. Run `make all` to build locally
+4. Flash firmware to keyboard halves using `make flash-info`
 
 ### Production Deployment Strategy
-- Automated builds via GitHub Actions
-- Firmware distributed as GitHub Actions artifacts
+- Local builds via `make all`
+- Firmware binaries stored in `firmware/` directory
 - Manual flashing required (USB mass storage bootloader)
 - No over-the-air update mechanism
 
@@ -183,7 +183,7 @@ corne.keymap
 ### Build Tools
 - **West**: Project and dependency management
 - **Zephyr CMake/Ninja**: Build system
-- **GitHub Actions**: Continuous integration
+- **Makefile**: Local build orchestration
 
 ### Hardware
 - **Nice!Nano v2**: Wireless microcontroller board (nRF52840)
@@ -198,8 +198,8 @@ corne.keymap
 └─────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   GitHub Repo   │────▶│  GitHub Actions │────▶│  Firmware .uf2  │
-│  (Source Code)  │     │    (Build CI)   │     │   Artifacts     │
+│   Source Code   │────▶│  make all       │────▶│  Firmware .uf2  │
+│  (config/)      │     │  (west build)   │     │  binaries       │
 └─────────────────┘     └─────────────────┘     └─────────────────┘
          │                       │
          ▼                       ▼
@@ -239,9 +239,8 @@ corne.keymap
 
 ```
 zmk-config/
-├── .github/
-│   └── workflows/
-│       └── build.yml          # CI/CD pipeline
+├── Makefile                   # Local build orchestration
+├── build.yaml                 # Build matrix
 ├── config/
 │   ├── corne.conf             # ZMK runtime configuration
 │   ├── corne.keymap           # Main keymap definition
@@ -277,8 +276,8 @@ zmk-config/
 
 ### Potential Improvements
 1. **Move library files**: The `.vscode/lib/` directory contains essential configuration files but is gitignored. Consider moving to a `lib/` or `include/` directory at project root.
-2. **Add keymap validation**: Implement CI step to validate keymap syntax before building
-3. **Remove binaries**: Add `firmware/` to `.gitignore` and rely on GitHub Actions artifacts
+2. **Add keymap validation**: Implement pre-commit hook to validate keymap syntax before building
+3. **Remove binaries**: Add `firmware/` to `.gitignore` and keep binaries locally only
 4. **Documentation**: Add troubleshooting guide and flashing instructions
 5. **Layer documentation**: Document the purpose and usage of each layer more thoroughly
 
