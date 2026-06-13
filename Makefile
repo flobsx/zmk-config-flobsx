@@ -87,10 +87,8 @@ build:
 flash: build
 	@echo ""
 	@echo "Flashing firmware..."
-	docker run $(DOCKER_FLAGS) \
-	  --device=/dev/ttyACM0:/dev/ttyACM0 \
-	  --device=/dev/sda:/dev/sda \
-	  -v /media:/media:rw \
+	docker run --rm $(DOCKER_FLAGS) \
+	  -v /run/media:/run/media:rw \
 	  -e FLASH_METHOD=$(or $(FLASH_METHOD),usb) \
 	  $(IMAGE_NAME) flash.sh
 
