@@ -7,8 +7,6 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/pointing.h>
-#include <dt-bindings/zmk/pointing.h>
-#include <dt-bindings/zmk/pointing.h>
 
 /*
  * Here is a translation for all the French keys (AZERTY layout)
@@ -145,10 +143,10 @@
         base {
             display-name = "Base";
             bindings = <
-&kp ESC     &kp Q  &kp C  &kp O         &kp P         &kp W        &kp J      &kp M        &kp D    &kp SINGLE_QUOTE  &kp Y     &kp BSPC
-&kp TAB     &kp A  &kp S  &kp E         &kp N         &kp F        &kp H      &kp J        &kp K    &kp L             &kp SEMI  &kp DEL
-&kp LSHIFT  &kp Z  &kp X  &kp QUESTION  &kp V         &kp B        &kp DOT    &kp H        &kp G    &kp COMMA         &kp K     &kp EQUAL
-                          &kp LSHIFT    &lt LEF BSPC  &kp SPACE    &kp ENTER  &lt RIG ESC  &kp TAB
+&kp ESC     &kp Q  &kp C  &kp O       &kp P         &kp W        &kp J      &kp M        &kp D    &kp SINGLE_QUOTE  &kp Y  &kp BSPC
+&kp TAB     &kp A  &kp S  &kp E       &kp N         &kp F        &kp L      &kp R        &kp T    &kp I             &kp U  &kp DEL
+&kp LSHIFT  &kp Z  &kp X  &kp MINUS   &kp V         &kp B        &kp DOT    &kp H        &kp G    &kp COMMA         &kp K  &kp EQUAL
+                          &kp LSHIFT  &lt LEF BSPC  &kp SPACE    &kp ENTER  &lt RIG ESC  &kp TAB
             >;
         };
 
