@@ -46,7 +46,7 @@ SNIPPET_LEFT := studio-rpc-usb-uart
 KEYMAP_SRC   := $(CONFIG_DIR)/layouts/$(LAYOUT)/corne.keymap
 KEYMAP_DST   := $(CONFIG_DIR)/corne.keymap
 
-.PHONY: help all left right setup clean flash-info generate-keymap layout new copy copy-left copy-right
+.PHONY: help all left right setup clean flash-info download generate-keymap layout new copy copy-left copy-right
 
 help:
 	@LAYOUT="$(LAYOUT)" scripts/box.sh
@@ -130,6 +130,9 @@ flash-info:
 	@echo "  3. Copy the matching $(BOLD).uf2$(RESET) file to that drive:"
 	@echo "     $(GREEN)→$(RESET) Left half : $(CYAN)$(FIRMWARE_DIR)/$(LAYOUT)_corne_left.uf2$(RESET)"
 	@echo "     $(GREEN)→$(RESET) Right half: $(CYAN)$(FIRMWARE_DIR)/$(LAYOUT)_corne_right.uf2$(RESET)"
+
+download:
+	@scripts/download-firmware.sh $(LAYOUT)
 
 # ── Flash / Copy targets ──────────────────────────────────────────
 
