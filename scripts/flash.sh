@@ -12,6 +12,27 @@ if [ ${#UF2_FILES[@]} -eq 0 ] || [ ! -e "${UF2_FILES[0]}" ]; then
   exit 1
 fi
 
+# Wait for mount point to disappear (device rebooted)
+wait_for_unmount() {
+  local SIDE=$1
+  echo -e "  \033[0;36mWaiting for device to reboot...\033[0m"
+  while true; do
+    MOUNT_POINT=$(find /run/media -name "NICE_NANO" -type d 2>/dev/null | head -1)
+    if [ -z "$MOUNT_POINT" ]; then
+      MOUNT_POINT=$(find /run/media -name "NICENANO" -type d 2>/dev/null | head -1)
+    fi
+    if [ -z "$MOUNT_POINT" ]; then
+      MOUNT_POINT=$(find /run/media -name "PYBFLASH" -type d 2>/dev/null | head -1)
+    fi
+    
+    if [ -z "$MOUNT_POINT" ]; then
+      echo -e "  \033[1;32m✓ Device rebooted successfully\033[0m"
+      return 0
+    fi
+    sleep 1
+  done
+}
+
 # Flash via USB mass storage (mount point detection)
 flash_usb() {
   local UF2=$1
@@ -26,8 +47,11 @@ flash_usb() {
     if [ -d "$NICE_NANO_PATH" ]; then
       cp "$UF2" "$NICE_NANO_PATH/"
       sync
-      echo "  ✓ Flashed $SIDE via USB"
-      sleep 2
+      echo -e "  \033[1;32m✓ Flashed $SIDE via USB\033[0m"
+      wait_for_unmount "$SIDE"
+      echo ""
+      echo -e "\033[1;33m  ━━━ Next: unplug this device and connect the next one ━━━\033[0m"
+      echo ""
       return 0
     else
       echo "  ERROR: Path does not exist: $NICE_NANO_PATH"
@@ -50,7 +74,10 @@ flash_usb() {
       cp "$UF2" "$MOUNT_POINT/"
       sync
       echo -e "  \033[1;32m✓ Flashed $SIDE via USB\033[0m"
-      sleep 2  # Wait for reboot
+      wait_for_unmount "$SIDE"
+      echo ""
+      echo -e "\033[1;33m  ━━━ Next: unplug this device and connect the next one ━━━\033[0m"
+      echo ""
       return 0
     fi
     echo -e "  \033[0;33m→ Press reset on nice!nano ($SIDE)...\033[0m"
@@ -73,6 +100,12 @@ echo -e "\033[1;36m║                    FLASHING FIRMWARE                     
 echo -e "\033[1;36m╚════════════════════════════════════════════════════════════════╝\033[0m"
 echo ""
 echo -e "\033[1;33mFlashing ${#UF2_FILES[@]} device(s) via $METHOD method\033[0m"
+echo ""
+echo -e "\033[1;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+echo -e "\033[1;31m  IMPORTANT: Flash devices ONE AT A TIME in order:\033[0m"
+echo -e "\033[1;31m  1. Flash LEFT half → wait for reboot → unplug\033[0m"
+echo -e "\033[1;31m  2. Flash RIGHT half → wait for reboot → unplug\033[0m"
+echo -e "\033[1;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 echo ""
 
 # Loop over UF2 files
