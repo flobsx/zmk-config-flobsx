@@ -35,13 +35,48 @@ help:
 
 # Initialize workspace (first time)
 setup:
+	@echo ""
+	@echo "╔════════════════════════════════════════════════════════════════╗"
+	@echo "║                    ZMK LOCAL BUILD SETUP                       ║"
+	@echo "╚════════════════════════════════════════════════════════════════╝"
+	@echo ""
+	@echo -e "\033[1;33m⚠  PRÉREQUIS :\033[0m"
+	@echo ""
+	@echo -e "  \033[1;36m1.\033[0m Docker installé et running"
+	@echo -e "  \033[1;36m2.\033[0m Utilisateur dans le groupe \033[1mdialout\033[0m ou \033[1mplugdev\033[0m (pour accès USB)"
+	@echo ""
+	@echo -e "\033[1;33m   Pour ajouter votre utilisateur au groupe :\033[0m"
+	@echo -e "   \033[1;37msudo usermod -aG dialout $$USER\033[0m"
+	@echo -e "   \033[1;33mPuis déconnectez-vous et reconnectez-vous.\033[0m"
+	@echo ""
+	@echo "──────────────────────────────────────────────────────────────────"
+	@echo ""
+	@echo "Vérification des prérequis..."
+	@command -v docker >/dev/null 2>&1 || { echo -e "\033[1;31m✗ Docker n'est pas installé\033[0m"; exit 1; }
+	@docker info >/dev/null 2>&1 || { echo -e "\033[1;31m✗ Docker n'est pas running\033[0m"; exit 1; }
+	@echo -e "\033[1;32m✓ Docker est installé et running\033[0m"
+	@if groups $$USER | grep -qE '\b(dialout|plugdev)\b'; then \
+		echo -e "\033[1;32m✓ Utilisateur dans le groupe dialout/plugdev\033[0m"; \
+	else \
+		echo -e "\033[1;33m⚠  Utilisateur PAS dans dialout/plugdev (flash USB peut échouer)\033[0m"; \
+		echo -e "\033[1;33m   Exécutez: sudo usermod -aG dialout $$USER\033[0m"; \
+		echo -e "\033[1;33m   Puis déconnectez-vous et reconnectez-vous.\033[0m"; \
+	fi
+	@echo ""
+	@echo "──────────────────────────────────────────────────────────────────"
+	@echo ""
 	@echo "Building Docker image..."
 	docker build -t $(IMAGE_NAME) scripts/
 	@echo ""
 	@echo "Initializing west workspace (this may take 5-10 min on first run)..."
 	docker run $(DOCKER_FLAGS) $(IMAGE_NAME) setup.sh
 	@echo ""
-	@echo "✓ Setup complete. You can now run 'make build'."
+	@echo -e "\033[1;32m╔════════════════════════════════════════════════════════════════╗\033[0m"
+	@echo -e "\033[1;32m║              ✓ SETUP COMPLETE                                  ║\033[0m"
+	@echo -e "\033[1;32m╚════════════════════════════════════════════════════════════════╝\033[0m"
+	@echo ""
+	@echo -e "Vous pouvez maintenant exécuter: \033[1;36mmake build\033[0m"
+	@echo ""
 
 # Build left + right
 build:
