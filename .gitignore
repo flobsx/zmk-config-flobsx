@@ -12,3 +12,6 @@ modules/
 build/
 build-left/
 build-right/
+
+!AGENTS.md
+.zmk/
