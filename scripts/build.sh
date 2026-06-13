@@ -28,7 +28,7 @@ for SHIELD in "${SHIELDS[@]}"; do
   
   west build -b "$BOARD" -d "/zmk/build/$SHIELD" -- \
     -DSHIELD="$SHIELD" \
-    -DZMK_CONFIG="/zmk/config"
+    -DZMK_CONFIG="/zmk/workspace/config"
   
   # Copy .uf2 to output with clear name
   UF2_NAME="${SHIELD%% *}.uf2"

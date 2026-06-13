@@ -2,13 +2,12 @@
 set -e
 
 WORKSPACE="/zmk/workspace"
+CONFIG_DIR="$WORKSPACE/config"
 
 # Initialize west workspace if not exists
 if [ ! -d "$WORKSPACE/.west" ]; then
   echo "Initializing west workspace in $WORKSPACE..."
-  mkdir -p "$WORKSPACE"
-  cd "$WORKSPACE"
-  west init -l /zmk/config
+  west init -l "$CONFIG_DIR"
   west update
   echo "West workspace initialized."
 else

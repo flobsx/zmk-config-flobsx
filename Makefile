@@ -6,7 +6,7 @@ CACHE_VOLUME := zmk-cache
 
 # Docker flags
 DOCKER_FLAGS := --rm \
-  -v $(CONFIG_DIR):/zmk/config \
+  -v $(CONFIG_DIR):/zmk/workspace/config \
   -v $(BUILD_DIR):/zmk/build \
   -v $(CACHE_VOLUME):/zmk/workspace
 
