@@ -155,6 +155,62 @@ west build -b nice_nano_v2 -- -DSHIELD=corne_left
 - **Display themes**: The `nice-futurama-sus` module provides the OLED
   widget. Swap or extend by changing the remote/revision in `west.yml`.
 
+## Local Build Tooling
+
+Local Docker-based build and flash tooling is available for rapid iteration:
+
+### Prerequisites
+
+- Docker installed and running
+- User in `dialout` or `plugdev` group (for USB access): `sudo usermod -aG dialout $USER`
+- Log out and back in after group change
+
+### Quick Start
+
+```bash
+# First time: initialize workspace (5-10 min)
+make setup
+
+# Build firmware (~30s with cache)
+make build
+
+# Build and flash to nice!nano via USB
+make flash
+
+# Interactive shell for debugging
+make shell
+
+# Clean everything
+make clean
+```
+
+### How It Works
+
+- **Docker container**: Based on `zmkfirmware/zmk-build-arm` with dfu-util added
+- **Persistent cache**: West modules cached in Docker volume `zmk-cache`
+- **Outputs**: `build/output/corne_left.uf2` and `build/output/corne_right.uf2`
+- **Flash method**: USB mass storage (detects `NICE_NANO` mount point)
+
+### Flash Procedure
+
+1. Run `make flash`
+2. When prompted, press reset button on first nice!nano
+3. Wait for flash to complete and device to reboot
+4. When prompted, press reset on second nice!nano
+5. Wait for completion
+
+### Troubleshooting
+
+- **USB permissions**: Ensure user is in `dialout` group
+- **Build fails**: Check `config/corne.keymap` syntax
+- **Flash not detected**: Verify nice!nano is in bootloader mode (double-tap reset)
+- **Cache issues**: Run `make clean` then `make setup`
+
+### Future Extensions
+
+- `FLASH_METHOD=dfu make flash` — DFU flash method (not yet implemented)
+- `ZMK_SOURCE=/path` — Bind-mount ZMK source for firmware development (not yet implemented)
+
 ## Further Reading
 
 - [ZMK Documentation](https://zmk.dev/docs)
