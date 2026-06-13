@@ -1,6 +1,17 @@
 #!/bin/bash
 set -e
 
+WORKSPACE="/zmk/workspace"
+
+# Verify workspace exists
+if [ ! -d "$WORKSPACE/.west" ]; then
+  echo "ERROR: West workspace not found in $WORKSPACE"
+  echo "Run 'make setup' first to initialize the workspace."
+  exit 1
+fi
+
+cd "$WORKSPACE"
+
 SHIELDS=(
   "corne_left nice_view_adapter nice_futurama_sus"
   "corne_right nice_view_adapter nice_futurama_sus"
