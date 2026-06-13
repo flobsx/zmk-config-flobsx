@@ -189,21 +189,30 @@ make clean
 - **Docker container**: Based on `zmkfirmware/zmk-build-arm` with dfu-util added
 - **Persistent cache**: West modules cached in Docker volume `zmk-cache`
 - **Outputs**: `build/output/corne_left.uf2` and `build/output/corne_right.uf2`
-- **Flash method**: USB mass storage (detects `NICE_NANO` mount point)
+- **Flash method**: USB mass storage (detects `NICENANO` mount point in `/run/media/`)
+- **Build process**: Runs `west zephyr-export` before each build to register Zephyr CMake package
 
 ### Flash Procedure
 
+**IMPORTANT: Flash devices ONE AT A TIME in order!**
+
 1. Run `make flash`
-2. When prompted, press reset button on first nice!nano
-3. Wait for flash to complete and device to reboot
-4. When prompted, press reset on second nice!nano
-5. Wait for completion
+2. **LEFT half**: When prompted, plug in left nice!nano and press reset (double-tap)
+3. Wait for flash to complete and device to reboot automatically
+4. **Unplug the left device** before proceeding
+5. **RIGHT half**: When prompted, plug in right nice!nano and press reset (double-tap)
+6. Wait for flash to complete and device to reboot
+7. Unplug the right device
+
+The script waits for each device to reboot (mount point disappears) before proceeding to the next one. This prevents accidentally flashing the wrong firmware to a device.
 
 ### Troubleshooting
 
 - **USB permissions**: Ensure user is in `dialout` group
 - **Build fails**: Check `config/corne.keymap` syntax
 - **Flash not detected**: Verify nice!nano is in bootloader mode (double-tap reset)
+- **Mount point not found**: On Ubuntu, mount point is `/run/media/$USER/NICENANO` (not `/media/`)
+- **Wrong firmware flashed**: The script now waits for device reboot between flashes. If you see the same firmware flashed twice, check that you unplugged the first device before connecting the second.
 - **Cache issues**: Run `make clean` then `make setup`
 
 ### Future Extensions
