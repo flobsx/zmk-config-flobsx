@@ -12,6 +12,9 @@ fi
 
 cd "$WORKSPACE"
 
+# Export Zephyr CMake package (required for each build)
+west zephyr-export
+
 SHIELDS=(
   "corne_left nice_view_adapter nice_futurama_sus"
   "corne_right nice_view_adapter nice_futurama_sus"
@@ -26,13 +29,16 @@ for SHIELD in "${SHIELDS[@]}"; do
   echo "Building for shield: $SHIELD"
   echo "=========================================="
   
-  west build -b "$BOARD" -d "/zmk/build/$SHIELD" -- \
+  # Use underscore instead of space for build directory name
+  BUILD_DIR_NAME="${SHIELD// /_}"
+  
+  west build -s /zmk/workspace/zmk/app -b "$BOARD" -d "/zmk/build/$BUILD_DIR_NAME" -- \
     -DSHIELD="$SHIELD" \
     -DZMK_CONFIG="/zmk/workspace/config"
   
   # Copy .uf2 to output with clear name
   UF2_NAME="${SHIELD%% *}.uf2"
-  cp "/zmk/build/$SHIELD/zephyr/zmk.uf2" "$OUTPUT_DIR/$UF2_NAME"
+  cp "/zmk/build/$BUILD_DIR_NAME/zephyr/zmk.uf2" "$OUTPUT_DIR/$UF2_NAME"
   echo "Copied: $OUTPUT_DIR/$UF2_NAME"
 done
 
