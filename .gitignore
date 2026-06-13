@@ -1,0 +1,6 @@
+# ZMK local build tooling
+build/
+.west/
+
+# Docker
+.docker/
