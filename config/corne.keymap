@@ -101,6 +101,7 @@
 #define LEF 2
 #define TRI 3
 #define MOUSE 4
+#define ACCENT 5
 
 // Mouse settings
 
@@ -108,6 +109,44 @@
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 10    // default: 10
 
 / {
+    macros {
+        mac_a_circ: mac_a_circ {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp FR_CIRC>, <&kp FR_A>;
+        };
+        mac_e_circ: mac_e_circ {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp FR_CIRC>, <&kp FR_E>;
+        };
+        mac_i_circ: mac_i_circ {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp FR_CIRC>, <&kp FR_I>;
+        };
+        mac_o_circ: mac_o_circ {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp FR_CIRC>, <&kp FR_O>;
+        };
+        mac_u_circ: mac_u_circ {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp FR_CIRC>, <&kp FR_U>;
+        };
+        mac_e_diae: mac_e_diae {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp FR_DIAE>, <&kp FR_E>;
+        };
+        mac_i_diae: mac_i_diae {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp FR_DIAE>, <&kp FR_I>;
+        };
+    };
+
     combos {
         compatible = "zmk,combos";
 
@@ -186,6 +225,16 @@
 &none        &kp LC(LS(TAB))  &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_RIGHT  &none        &none      &mmv MOVE_LEFT   &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &kp LC(TAB)    &none
 &bootloader  &kp LC(Z)        &kp LC(C)       &kp LC(X)       &kp LC(V)        &none        &none      &kp LC(LS(TAB))  &kp LC(Z)       &kp LC(TAB)      &kp LC(LS(T))  &none
                                               &none           &none            &mkp LCLK    &mkp MCLK  &mkp RCLK        &none
+            >;
+        };
+
+        accent {
+            display-name = "Accent";
+            bindings = <
+&trans  &mac_a_circ   &kp FR_CCED   &mac_o_circ   &kp RA(FR_O)  &kp FR_CIRC      &trans  &kp FR_MICR  &trans       &trans       &mac_u_circ  &trans
+&trans  &kp FR_AGRV   &kp FR_EACU   &mac_e_circ   &kp FR_EGRV   &mac_e_diae      &trans  &trans       &mac_i_circ  &mac_i_diae  &kp FR_UGRV  &trans
+&trans  &kp RA(FR_A)  &trans        &kp FR_EURO   &trans        &trans           &trans  &trans       &trans       &trans       &trans       &trans
+                                    &trans        &trans        &trans           &trans  &trans       &trans
             >;
         };
     };
