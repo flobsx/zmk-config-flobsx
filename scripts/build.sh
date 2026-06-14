@@ -15,31 +15,61 @@ cd "$WORKSPACE"
 # Export Zephyr CMake package (required for each build)
 west zephyr-export
 
-SHIELDS=(
-  "corne_left nice_view_adapter nice_futurama_sus"
-  "corne_right nice_view_adapter nice_futurama_sus"
-)
-BOARD="nice_nano_v2"
 OUTPUT_DIR="/zmk/build/output"
+BUILD_YAML="/zmk/workspace/config/build.yaml"
 
 mkdir -p "$OUTPUT_DIR"
 
-for SHIELD in "${SHIELDS[@]}"; do
+# Parse build.yaml to extract board/shield combinations
+# Format: each entry in include[] has board and shield fields
+if [ ! -f "$BUILD_YAML" ]; then
+  echo -e "\033[1;31mERROR: build.yaml not found at $BUILD_YAML\033[0m"
+  exit 1
+fi
+
+# Extract board and shield pairs from build.yaml
+# Using yq to parse YAML - extract all include entries
+NUM_ENTRIES=$(yq '.include | length' "$BUILD_YAML")
+
+if [ "$NUM_ENTRIES" -eq 0 ] || [ "$NUM_ENTRIES" = "null" ]; then
+  echo -e "\033[1;31mERROR: No entries found in build.yaml include section\033[0m"
+  exit 1
+fi
+
+echo -e "\033[1;33mFound $NUM_ENTRIES build configuration(s) in build.yaml\033[0m"
+echo ""
+
+for i in $(seq 0 $((NUM_ENTRIES - 1))); do
+  BOARD=$(yq ".include[$i].board" "$BUILD_YAML")
+  SHIELD=$(yq ".include[$i].shield" "$BUILD_YAML")
+  
+  if [ -z "$BOARD" ] || [ "$BOARD" = "null" ]; then
+    echo -e "\033[1;33m⚠  Skipping entry $i: no board specified\033[0m"
+    continue
+  fi
+  
+  if [ -z "$SHIELD" ] || [ "$SHIELD" = "null" ]; then
+    echo -e "\033[1;33m⚠  Skipping entry $i: no shield specified\033[0m"
+    continue
+  fi
+  
   echo ""
   echo -e "\033[1;36m╔════════════════════════════════════════════════════════════════╗\033[0m"
-  echo -e "\033[1;36m║  Building for shield: $SHIELD\033[0m"
+  echo -e "\033[1;36m║  Building for board: $BOARD\033[0m"
+  echo -e "\033[1;36m║  Shield(s): $SHIELD\033[0m"
   echo -e "\033[1;36m╚════════════════════════════════════════════════════════════════╝\033[0m"
   echo ""
   
   # Use underscore instead of space for build directory name
-  BUILD_DIR_NAME="${SHIELD// /_}"
+  BUILD_DIR_NAME="${BOARD}_${SHIELD// /_}"
   
   west build -s /zmk/workspace/zmk/app -b "$BOARD" -d "/zmk/build/$BUILD_DIR_NAME" -- \
     -DSHIELD="$SHIELD" \
     -DZMK_CONFIG="/zmk/workspace/config"
   
-  # Copy .uf2 to output with clear name
-  UF2_NAME="${SHIELD%% *}.uf2"
+  # Copy .uf2 to output with clear name (use first shield as filename)
+  FIRST_SHIELD="${SHIELD%% *}"
+  UF2_NAME="${FIRST_SHIELD}.uf2"
   cp "/zmk/build/$BUILD_DIR_NAME/zephyr/zmk.uf2" "$OUTPUT_DIR/$UF2_NAME"
   echo -e "\033[1;32m✓ Copied:\033[0m $OUTPUT_DIR/$UF2_NAME"
 done

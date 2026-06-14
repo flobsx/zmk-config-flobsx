@@ -8,7 +8,8 @@ CACHE_VOLUME := zmk-cache
 DOCKER_FLAGS := --rm \
   -v $(CONFIG_DIR):/zmk/workspace/config \
   -v $(BUILD_DIR):/zmk/build \
-  -v $(CACHE_VOLUME):/zmk/workspace
+  -v $(CACHE_VOLUME):/zmk/workspace \
+  -v $(shell pwd)/build.yaml:/zmk/workspace/config/build.yaml:ro
 
 # Phony targets
 .PHONY: setup build flash clean shell help
@@ -21,6 +22,7 @@ help:
 	@echo "  make setup    - Initialize workspace (first time only)"
 	@echo "  make build    - Build firmware for left + right halves"
 	@echo "  make flash    - Build and flash firmware via USB"
+	@echo "  make flash-only - Flash firmware without rebuilding"
 	@echo "  make clean    - Remove build artifacts and cache"
 	@echo "  make shell    - Interactive shell for debugging"
 	@echo ""
@@ -31,6 +33,7 @@ help:
 	@echo "  make setup"
 	@echo "  make build"
 	@echo "  make flash"
+	@echo "  make flash-only"
 	@echo "  FLASH_METHOD=dfu make flash  # (future)"
 
 # Initialize workspace (first time)
@@ -87,10 +90,13 @@ build:
 flash: build
 	@echo ""
 	@echo "Flashing firmware..."
-	docker run --rm $(DOCKER_FLAGS) \
-	  -v /run/media:/run/media:rw \
-	  -e FLASH_METHOD=$(or $(FLASH_METHOD),usb) \
-	  $(IMAGE_NAME) flash.sh
+	./scripts/flash-local.sh
+
+# Flash without rebuilding (use existing UF2 files)
+flash-only:
+	@echo ""
+	@echo "Flashing firmware (no rebuild)..."
+	./scripts/flash-local.sh
 
 # Interactive shell (debug)
 shell:

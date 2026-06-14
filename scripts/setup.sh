@@ -9,7 +9,8 @@ if [ ! -d "$WORKSPACE/.west" ]; then
   echo "Initializing west workspace in $WORKSPACE..."
   west init -l "$CONFIG_DIR"
   west update
-  echo "West workspace initialized."
+  west zephyr-export
+  echo "West workspace initialized and Zephyr exported."
 else
   echo "West workspace already exists in $WORKSPACE. Skipping initialization."
 fi

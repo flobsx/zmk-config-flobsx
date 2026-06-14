@@ -1,9 +1,15 @@
 #!/bin/bash
 set -e
 
-OUTPUT_DIR="/zmk/build/output"
-METHOD="${FLASH_METHOD:-usb}"
+OUTPUT_DIR="build/output"
 UF2_FILES=("$OUTPUT_DIR"/*.uf2)
+
+# Check if UF2 files exist
+if [ ${#UF2_FILES[@]} -eq 0 ] || [ ! -e "${UF2_FILES[0]}" ]; then
+  echo "ERROR: No UF2 files found in $OUTPUT_DIR"
+  echo "Run 'make build' first."
+  exit 1
+fi
 
 # Clean up stale bootloader mounts (from previous flashes)
 cleanup_stale_mounts() {
@@ -24,36 +30,26 @@ cleanup_stale_mounts() {
   done
 }
 
-# Clean stale mounts at startup
-cleanup_stale_mounts
-
-# Check if UF2 files exist
-if [ ${#UF2_FILES[@]} -eq 0 ] || [ ! -e "${UF2_FILES[0]}" ]; then
-  echo "ERROR: No UF2 files found in $OUTPUT_DIR"
-  echo "Run 'make build' first."
-  exit 1
-fi
-
 # Wait for user to unplug and prepare next device
 wait_for_next_device() {
   local SIDE=$1
+  local IS_LAST=$2
   echo ""
   echo -e "  \033[1;33m✓ Flash terminé pour $SIDE\033[0m"
   echo -e "  \033[0;36mLe clavier va rebooter automatiquement.\033[0m"
   echo ""
-  echo -e "  \033[1m→ Débranche ce clavier et prépare le suivant.\033[0m"
-  echo -e "  \033[0;33mAttente de 10 secondes...\033[0m"
+  if [ "$IS_LAST" = "true" ]; then
+    echo -e "  \033[1m→ Débranche ce clavier, c'est le dernier !\033[0m"
+  else
+    echo -e "  \033[1m→ Débranche ce clavier et prépare le suivant.\033[0m"
+  fi
+  echo -e "  \033[0;33mAttente de 5 secondes...\033[0m"
   echo ""
-  sleep 10
+  sleep 5
 }
 
 # Detect bootloader mount point by checking for UF2 bootloader files
-# Returns the most recently modified mount to avoid stale mounts
 detect_bootloader_mount() {
-  local latest_mount=""
-  local latest_time=0
-  
-  # Search in all /run/media subdirectories (works regardless of user)
   for media_dir in /run/media/*/; do
     if [ ! -d "$media_dir" ]; then
       continue
@@ -62,25 +58,9 @@ detect_bootloader_mount() {
     # Search for directories that look like nice!nano bootloader
     for mount in "$media_dir"NICENANO*; do
       if [ -d "$mount" ]; then
-        echo "DEBUG: Checking $mount" >&2
-        # Check for bootloader signature files
-        if [ -f "$mount/CURRENT.UF2" ]; then
-          echo "DEBUG:   CURRENT.UF2 exists" >&2
-          if [ -f "$mount/INFO_UF2.TXT" ]; then
-            echo "DEBUG:   INFO_UF2.TXT exists" >&2
-            # Get modification time of INFO_UF2.TXT (more reliable than directory mtime)
-            local mtime=$(stat -c %Y "$mount/INFO_UF2.TXT" 2>/dev/null || echo 0)
-            echo "DEBUG:   mtime=$mtime" >&2
-            if [ "$mtime" -gt "$latest_time" ]; then
-              latest_time=$mtime
-              latest_mount=$mount
-              echo "DEBUG:   New latest mount" >&2
-            fi
-          else
-            echo "DEBUG:   INFO_UF2.TXT missing" >&2
-          fi
-        else
-          echo "DEBUG:   CURRENT.UF2 missing" >&2
+        if [ -f "$mount/CURRENT.UF2" ] && [ -f "$mount/INFO_UF2.TXT" ]; then
+          echo "$mount"
+          return 0
         fi
       fi
     done
@@ -89,28 +69,21 @@ detect_bootloader_mount() {
     for mount in "$media_dir"NICE_NANO "$media_dir"PYBFLASH; do
       if [ -d "$mount" ]; then
         if [ -f "$mount/CURRENT.UF2" ] && [ -f "$mount/INFO_UF2.TXT" ]; then
-          local mtime=$(stat -c %Y "$mount/INFO_UF2.TXT" 2>/dev/null || echo 0)
-          if [ "$mtime" -gt "$latest_time" ]; then
-            latest_time=$mtime
-            latest_mount=$mount
-          fi
+          echo "$mount"
+          return 0
         fi
       fi
     done
   done
   
-  if [ -n "$latest_mount" ]; then
-    echo "$latest_mount"
-    return 0
-  fi
-  
   return 1
 }
 
-# Flash via USB mass storage (semi-automatic mode)
+# Flash via USB mass storage
 flash_usb() {
   local UF2=$1
   local SIDE=$2
+  local IS_LAST=$3
   
   echo ""
   echo -e "\033[1;33m━━━ Préparation pour $SIDE ━━━\033[0m"
@@ -123,30 +96,12 @@ flash_usb() {
   echo ""
   echo -e "\033[1;32mEn attente de détection du bootloader...\033[0m"
   
-  # Allow manual override via environment variable
-  if [ -n "$NICE_NANO_PATH" ]; then
-    echo -e "  \033[0;33mUsing manual path: $NICE_NANO_PATH\033[0m"
-    if [ -d "$NICE_NANO_PATH" ]; then
-      cp "$UF2" "$NICE_NANO_PATH/"
-      sync
-      echo -e "  \033[1;32m✓ Flashed $SIDE via USB\033[0m"
-      wait_for_next_device "$SIDE"
-      return 0
-    else
-      echo -e "  \033[1;31mERROR: Path does not exist: $NICE_NANO_PATH\033[0m"
-      exit 1
-    fi
-  fi
-  
   # Auto-detect bootloader mount
   MOUNT_POINT=""
   while [ -z "$MOUNT_POINT" ]; do
     MOUNT_POINT=$(detect_bootloader_mount || true)
     if [ -z "$MOUNT_POINT" ]; then
-      # Debug: show what we see
-      echo -e "  \033[0;33mScan /run/media...\033[0m"
-      ls -la /run/media/*/ 2>/dev/null | grep -E "(NICENANO|NICE_NANO|PYBFLASH)" || echo "    Aucun mount trouvé"
-      sleep 2
+      sleep 1
     fi
   done
   
@@ -158,28 +113,18 @@ flash_usb() {
   echo -e "  \033[1;32m✓ Firmware copié: $SIDE\033[0m"
   
   # Wait for user to unplug and prepare next device
-  wait_for_next_device "$SIDE"
-  
-  echo ""
-  echo -e "\033[1;33m  ━━━ Débranche ce clavier avant de passer au suivant ━━━\033[0m"
-  echo ""
+  wait_for_next_device "$SIDE" "$IS_LAST"
 }
 
-# Flash via dfu-util (future extension)
-flash_dfu() {
-  local UF2=$1
-  local SIDE=$2
-  echo "ERROR: DFU method not yet implemented."
-  echo "Use USB method (default): make flash"
-  exit 1
-}
+# Clean stale mounts at startup
+cleanup_stale_mounts
 
 echo ""
 echo -e "\033[1;36m╔════════════════════════════════════════════════════════════════╗\033[0m"
 echo -e "\033[1;36m║                    FLASHING FIRMWARE                             ║\033[0m"
 echo -e "\033[1;36m╚════════════════════════════════════════════════════════════════╝\033[0m"
 echo ""
-echo -e "\033[1;33mFlashing ${#UF2_FILES[@]} device(s) via $METHOD method\033[0m"
+echo -e "\033[1;33mFlashing ${#UF2_FILES[@]} device(s) via USB method\033[0m"
 echo ""
 echo -e "\033[1;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 echo -e "\033[1;31m  IMPORTANT: Flash devices ONE AT A TIME in order:\033[0m"
@@ -189,24 +134,24 @@ echo -e "\033[1;31m━━━━━━━━━━━━━━━━━━━━�
 echo ""
 
 # Loop over UF2 files
+TOTAL=${#UF2_FILES[@]}
+COUNT=0
 for UF2 in "${UF2_FILES[@]}"; do
   if [ ! -e "$UF2" ]; then
     continue
+  fi
+  
+  COUNT=$((COUNT + 1))
+  IS_LAST="false"
+  if [ "$COUNT" -eq "$TOTAL" ]; then
+    IS_LAST="true"
   fi
   
   SIDE=$(basename "$UF2" .uf2)
   echo ""
   echo -e "\033[1;35m━━━ Device: $SIDE ━━━\033[0m"
   
-  case "$METHOD" in
-    usb) flash_usb "$UF2" "$SIDE" ;;
-    dfu) flash_dfu "$UF2" "$SIDE" ;;
-    *) 
-      echo "ERROR: Unknown flash method: $METHOD"
-      echo "Supported methods: usb, dfu"
-      exit 1 
-      ;;
-  esac
+  flash_usb "$UF2" "$SIDE" "$IS_LAST"
 done
 
 echo ""

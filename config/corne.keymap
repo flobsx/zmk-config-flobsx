@@ -114,14 +114,13 @@
         // Define combo for Space+Enter to toggle between main and fourth layer
 
         toggle_fourth_layer {
-            key-positions = <SPACE ENTER 39 38>;
+            key-positions = <28 29 39 38>;  // Space=28, Enter=29 (positions Corne)
             timeout-ms = <50>;
             bindings = <&tog MOUSE>;
 
             // Prevent accidental activation
 
             require-prior-idle-ms = <100>;
-            layers = <4>;  // Only active in layer 0 (default) and layer 4
         };
     };
 
@@ -146,7 +145,7 @@
 &kp ESC     &kp Q  &kp C  &kp O       &kp P         &kp W        &kp J      &kp M        &kp D    &kp SINGLE_QUOTE  &kp Y  &kp BSPC
 &kp TAB     &kp A  &kp S  &kp E       &kp N         &kp F        &kp L      &kp R        &kp T    &kp I             &kp U  &kp DEL
 &kp LSHIFT  &kp Z  &kp X  &kp MINUS   &kp V         &kp B        &kp DOT    &kp H        &kp G    &kp COMMA         &kp K  &kp EQUAL
-                          &kp LSHIFT  &lt LEF BSPC  &kp SPACE    &kp ENTER  &lt RIG ESC  &kp TAB
+                          &kp LSHIFT  &lt LEF BSPC  &kp SPACE    &kp ENTER  &lt RIG DEL  &kp TAB
             >;
         };
 
@@ -164,7 +163,7 @@
             display-name = "^ Left ^";
             bindings = <
 &trans  &kp N1    &kp N2       &kp N3        &kp N4         &kp N5        &kp MINUS      &kp N7         &kp N8       &kp N9         &kp N0        &trans
-&trans  &kp BSLH  &kp LS(DOT)  &kp LS(NUBS)  &kp NUBS       &kp RA(N5)    &kp RA(MINUS)  &kp LS(EQUAL)  &kp LBKT     &kp L          &kp RBKT      &trans
+&trans  &kp BSLH  &kp LS(DOT)  &kp LS(NUBS)  &kp NUBS       &kp RA(N5)    &kp RA(MINUS)  &kp LS(EQUAL)  &kp LBKT     &kp RBKT       &kp RBKT      &trans
 &trans  &kp SQT   &kp DOT      &kp GRAVE     &kp LS(GRAVE)  &kp N5        &kp MINUS      &kp RA(N)      &kp LS(SQT)  &kp LS(MINUS)  &kp RA(RBKT)  &trans
                                &trans        &trans         &trans        &trans         &trans         &trans
             >;

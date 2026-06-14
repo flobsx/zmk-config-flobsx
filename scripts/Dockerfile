@@ -1,8 +1,11 @@
 FROM zmkfirmware/zmk-build-arm:stable
 
-# Install flash tools
+# Install flash tools and yq for YAML parsing
 RUN apt-get update && apt-get install -y \
     dfu-util \
+    wget \
+    && wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 \
+    && chmod +x /usr/local/bin/yq \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy build scripts
