@@ -12,7 +12,7 @@ DOCKER_FLAGS := --rm \
   -v $(shell pwd)/build.yaml:/zmk/workspace/config/build.yaml:ro
 
 # Phony targets
-.PHONY: setup build flash clean shell help
+.PHONY: setup build flash clean shell help build-left build-right flash-left flash-right
 
 # Default target
 help:
@@ -22,7 +22,11 @@ help:
 	@echo "  make setup    - Initialize workspace (first time only)"
 	@echo "  make build    - Build firmware for left + right halves"
 	@echo "  make flash    - Build and flash firmware via USB"
-	@echo "  make flash-only - Flash firmware without rebuilding"
+	@echo "  make flash-only - Flash all firmware (no rebuild)"
+	@echo "  make build-left  - Build left half only"
+	@echo "  make build-right - Build right half only"
+	@echo "  make flash-left  - Build and flash left half only"
+	@echo "  make flash-right - Build and flash right half only"
 	@echo "  make clean    - Remove build artifacts and cache"
 	@echo "  make shell    - Interactive shell for debugging"
 	@echo ""
@@ -81,10 +85,35 @@ setup:
 	@echo -e "Vous pouvez maintenant exécuter: \033[1;36mmake build\033[0m"
 	@echo ""
 
+# Mount local build.sh so staged/uncommitted changes are used inside the container
+BUILD_SCRIPT_MOUNT := -v $(shell pwd)/scripts/build.sh:/usr/local/bin/build.sh
+
 # Build left + right
 build:
 	@echo "Building firmware..."
-	docker run $(DOCKER_FLAGS) $(IMAGE_NAME) build.sh
+	docker run $(BUILD_SCRIPT_MOUNT) $(DOCKER_FLAGS) $(IMAGE_NAME) build.sh
+
+# Build left half only
+build-left:
+	@echo "Building left half firmware..."
+	docker run -e SHIELD_FILTER=corne_left $(BUILD_SCRIPT_MOUNT) $(DOCKER_FLAGS) $(IMAGE_NAME) build.sh
+
+# Build right half only
+build-right:
+	@echo "Building right half firmware..."
+	docker run -e SHIELD_FILTER=corne_right $(BUILD_SCRIPT_MOUNT) $(DOCKER_FLAGS) $(IMAGE_NAME) build.sh
+
+# Build and flash left half only
+flash-left: build-left
+	@echo ""
+	@echo "Flashing left half..."
+	./scripts/flash-local.sh corne_left
+
+# Build and flash right half only
+flash-right: build-right
+	@echo ""
+	@echo "Flashing right half..."
+	./scripts/flash-local.sh corne_right
 
 # Flash via USB (default)
 flash: build

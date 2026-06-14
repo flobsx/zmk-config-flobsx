@@ -20,6 +20,9 @@ BUILD_YAML="/zmk/workspace/config/build.yaml"
 
 mkdir -p "$OUTPUT_DIR"
 
+# Clean old UF2 files to avoid stale artifacts from previous builds
+rm -f "$OUTPUT_DIR"/*.uf2
+
 # Parse build.yaml to extract board/shield combinations
 # Format: each entry in include[] has board and shield fields
 if [ ! -f "$BUILD_YAML" ]; then
@@ -51,6 +54,15 @@ for i in $(seq 0 $((NUM_ENTRIES - 1))); do
   if [ -z "$SHIELD" ] || [ "$SHIELD" = "null" ]; then
     echo -e "\033[1;33m⚠  Skipping entry $i: no shield specified\033[0m"
     continue
+  fi
+
+  # Optional filter: if SHIELD_FILTER is set, only build entries whose shield
+  # name contains the filter value (e.g., SHIELD_FILTER=corne_left)
+  if [ -n "$SHIELD_FILTER" ]; then
+    if ! echo "$SHIELD" | grep -q "$SHIELD_FILTER"; then
+      echo -e "\033[0;33m  ⚠  Skipping $SHIELD (doesn't match filter: $SHIELD_FILTER)\033[0m"
+      continue
+    fi
   fi
   
   echo ""

@@ -1,12 +1,24 @@
 #!/bin/bash
 set -e
 
+SIDE_FILTER="$1"  # Optional: "corne_left" or "corne_right"
 OUTPUT_DIR="build/output"
-UF2_FILES=("$OUTPUT_DIR"/*.uf2)
+
+# Collect UF2 files, optionally filtered by side
+if [ -n "$SIDE_FILTER" ]; then
+  GLOB_PATTERN="$OUTPUT_DIR/${SIDE_FILTER}*.uf2"
+else
+  GLOB_PATTERN="$OUTPUT_DIR/*.uf2"
+fi
+
+UF2_FILES=($GLOB_PATTERN)
 
 # Check if UF2 files exist
 if [ ${#UF2_FILES[@]} -eq 0 ] || [ ! -e "${UF2_FILES[0]}" ]; then
   echo "ERROR: No UF2 files found in $OUTPUT_DIR"
+  if [ -n "$SIDE_FILTER" ]; then
+    echo "  (filtered for: $SIDE_FILTER)"
+  fi
   echo "Run 'make build' first."
   exit 1
 fi
@@ -124,13 +136,17 @@ echo -e "\033[1;36m╔═══════════════════�
 echo -e "\033[1;36m║                    FLASHING FIRMWARE                             ║\033[0m"
 echo -e "\033[1;36m╚════════════════════════════════════════════════════════════════╝\033[0m"
 echo ""
-echo -e "\033[1;33mFlashing ${#UF2_FILES[@]} device(s) via USB method\033[0m"
-echo ""
-echo -e "\033[1;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-echo -e "\033[1;31m  IMPORTANT: Flash devices ONE AT A TIME in order:\033[0m"
-echo -e "\033[1;31m  1. Flash LEFT half → wait for reboot → unplug\033[0m"
-echo -e "\033[1;31m  2. Flash RIGHT half → wait for reboot → unplug\033[0m"
-echo -e "\033[1;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+if [ -n "$SIDE_FILTER" ]; then
+  echo -e "\033[1;33mFlashing 1 device: ${SIDE_FILTER}\033[0m"
+else
+  echo -e "\033[1;33mFlashing ${#UF2_FILES[@]} device(s) via USB method\033[0m"
+  echo ""
+  echo -e "\033[1;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+  echo -e "\033[1;31m  IMPORTANT: Flash devices ONE AT A TIME in order:\033[0m"
+  echo -e "\033[1;31m  1. Flash LEFT half → wait for reboot → unplug\033[0m"
+  echo -e "\033[1;31m  2. Flash RIGHT half → wait for reboot → unplug\033[0m"
+  echo -e "\033[1;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+fi
 echo ""
 
 # Loop over UF2 files
@@ -155,7 +171,13 @@ for UF2 in "${UF2_FILES[@]}"; do
 done
 
 echo ""
-echo -e "\033[1;32m╔════════════════════════════════════════════════════════════════╗\033[0m"
-echo -e "\033[1;32m║              ✓ ALL DEVICES FLASHED SUCCESSFULLY                  ║\033[0m"
-echo -e "\033[1;32m╚════════════════════════════════════════════════════════════════╝\033[0m"
+if [ -n "$SIDE_FILTER" ]; then
+  echo -e "\033[1;32m╔════════════════════════════════════════════════════════════════╗\033[0m"
+  echo -e "\033[1;32m║              ✓ ${SIDE_FILTER} FLASHED SUCCESSFULLY                 \033[0m"
+  echo -e "\033[1;32m╚════════════════════════════════════════════════════════════════╝\033[0m"
+else
+  echo -e "\033[1;32m╔════════════════════════════════════════════════════════════════╗\033[0m"
+  echo -e "\033[1;32m║              ✓ ALL DEVICES FLASHED SUCCESSFULLY                  ║\033[0m"
+  echo -e "\033[1;32m╚════════════════════════════════════════════════════════════════╝\033[0m"
+fi
 echo ""
