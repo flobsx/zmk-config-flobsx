@@ -113,37 +113,43 @@
         mac_a_circ: mac_a_circ {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp FR_CIRC>, <&kp FR_A>;
+            bindings = <&kp FR_CIRC &kp FR_A>;
         };
+
         mac_e_circ: mac_e_circ {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp FR_CIRC>, <&kp FR_E>;
+            bindings = <&kp FR_CIRC &kp FR_E>;
         };
+
         mac_i_circ: mac_i_circ {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp FR_CIRC>, <&kp FR_I>;
+            bindings = <&kp FR_CIRC &kp FR_I>;
         };
+
         mac_o_circ: mac_o_circ {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp FR_CIRC>, <&kp FR_O>;
+            bindings = <&kp FR_CIRC &kp FR_O>;
         };
+
         mac_u_circ: mac_u_circ {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp FR_CIRC>, <&kp FR_U>;
+            bindings = <&kp FR_CIRC &kp FR_U>;
         };
+
         mac_e_diae: mac_e_diae {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp FR_DIAE>, <&kp FR_E>;
+            bindings = <&kp FR_DIAE &kp FR_E>;
         };
+
         mac_i_diae: mac_i_diae {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp FR_DIAE>, <&kp FR_I>;
+            bindings = <&kp FR_DIAE &kp FR_I>;
         };
     };
 
@@ -175,16 +181,56 @@
         };
     };
 
+    behaviors {
+        underscoreDBTap: underscoreDBTap {
+            compatible = "zmk,behavior-tap-dance";
+            label = "UNDERSCOREDBTAP";
+            #binding-cells = <0>;
+            bindings = <&kp MINUS>, <&kp UNDERSCORE>;
+        };
+
+        quoteDBTap: quoteDBTap {
+            compatible = "zmk,behavior-tap-dance";
+            label = "QUOTEDBTAP";
+            #binding-cells = <0>;
+            bindings = <&kp APOSTROPHE>, <&kp DOUBLE_QUOTES>;
+        };
+
+        colonDBTap: colonDBTap {
+            compatible = "zmk,behavior-tap-dance";
+            label = "COLONDBTAP";
+            #binding-cells = <0>;
+            bindings = <&kp COMMA>, <&kp SEMICOLON>;
+        };
+
+        dotDBTap: dotDBTap {
+            compatible = "zmk,behavior-tap-dance";
+            label = "DOTDBTAP";
+            #binding-cells = <0>;
+            bindings = <&kp DOT>, <&kp COLON>;
+        };
+
+        longPress: longPress {
+            compatible = "zmk,behavior-hold-tap";
+            label = "LONGPRESS";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <350>;
+            flavor = "tap-preferred";
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
         base {
             display-name = "Base";
             bindings = <
-&kp ESC     &kp Q             &kp C        &kp O           &kp P           &kp W        &kp J      &kp M            &kp D            &kp SINGLE_QUOTE  &kp Y              &kp BSPC
-&kp TAB     &mt LEFT_SHIFT A  &mt LCTRL S  &mt LEFT_GUI E  &mt LEFT_ALT N  &kp F        &kp L      &mt RIGHT_ALT R  &mt RIGHT_GUI T  &mt RCTRL I       &mt RIGHT_SHIFT U  &kp DEL
-&kp LSHIFT  &kp Z             &kp X        &kp MINUS       &kp V           &kp B        &kp DOT    &kp H            &kp G            &kp COMMA         &kp K              &kp EQUAL
-                                           &kp LSHIFT      &lt LEF BSPC    &kp SPACE    &kp ENTER  &lt RIG DEL      &kp TAB
+&kp ESC     &longPress LC(Q) Q  &longPress LC(C) C  &kp O           &longPress PRINTSCREEN P  &kp W        &kp J      &kp M            &kp D            &kp SINGLE_QUOTE  &kp Y              &kp BSPC
+&kp TAB     &mt LEFT_SHIFT A    &mt LCTRL S         &mt LEFT_GUI E  &mt LEFT_ALT N            &kp F        &kp L      &mt RIGHT_ALT R  &mt RIGHT_GUI T  &mt RCTRL I       &mt RIGHT_SHIFT U  &kp DEL
+&kp LSHIFT  &kp Z               &longPress LC(X) X  &kp MINUS       &longPress LC(V) V        &kp B        &kp DOT    &kp H            &kp G            &kp COMMA         &kp K              &kp EQUAL
+                                                    &kp LSHIFT      &lt LEF BSPC              &kp SPACE    &kp ENTER  &lt RIG DEL      &kp TAB
             >;
         };
 
@@ -231,10 +277,10 @@
         accent {
             display-name = "Accent";
             bindings = <
-&trans  &mac_a_circ   &kp FR_CCED   &mac_o_circ   &kp RA(FR_O)  &kp FR_CIRC      &trans  &kp FR_MICR  &trans       &trans       &mac_u_circ  &trans
-&trans  &kp FR_AGRV   &kp FR_EACU   &mac_e_circ   &kp FR_EGRV   &mac_e_diae      &trans  &trans       &mac_i_circ  &mac_i_diae  &kp FR_UGRV  &trans
-&trans  &kp RA(FR_A)  &trans        &kp FR_EURO   &trans        &trans           &trans  &trans       &trans       &trans       &trans       &trans
-                                    &trans        &trans        &trans           &trans  &trans       &trans
+&trans  &mac_a_circ   &kp FR_CCED  &mac_o_circ  &kp RA(FR_O)  &kp FR_CIRC    &trans  &kp FR_MICR  &trans       &trans       &mac_u_circ  &trans
+&trans  &kp FR_AGRV   &kp FR_EACU  &mac_e_circ  &kp FR_EGRV   &mac_e_diae    &trans  &trans       &mac_i_circ  &mac_i_diae  &kp FR_UGRV  &trans
+&trans  &kp RA(FR_A)  &trans       &kp FR_EURO  &trans        &trans         &trans  &trans       &trans       &trans       &trans       &trans
+                                   &trans       &trans        &trans         &trans  &trans       &trans
             >;
         };
     };
