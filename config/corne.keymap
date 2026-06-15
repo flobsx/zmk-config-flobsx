@@ -109,63 +109,14 @@
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 10    // default: 10
 
 / {
-    macros {
-        mac_a_circ: mac_a_circ {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&kp FR_CIRC &kp FR_A>;
-        };
-
-        mac_e_circ: mac_e_circ {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&kp FR_CIRC &kp FR_E>;
-        };
-
-        mac_i_circ: mac_i_circ {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&kp FR_CIRC &kp FR_I>;
-        };
-
-        mac_o_circ: mac_o_circ {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&kp FR_CIRC &kp FR_O>;
-        };
-
-        mac_u_circ: mac_u_circ {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&kp FR_CIRC &kp FR_U>;
-        };
-
-        mac_e_diae: mac_e_diae {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&kp FR_DIAE &kp FR_E>;
-        };
-
-        mac_i_diae: mac_i_diae {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&kp FR_DIAE &kp FR_I>;
-        };
-    };
-
     combos {
         compatible = "zmk,combos";
 
         // Define combo for Space+Enter to toggle between main and fourth layer
 
-        toggle_fourth_layer {
-            key-positions = <28 29 39 38>;  // Space=28, Enter=29 (positions Corne)
-            timeout-ms = <50>;
-            bindings = <&tog MOUSE>;
-
-            // Prevent accidental activation
-
-            require-prior-idle-ms = <100>;
+        MouseMod {
+            bindings = <&tog 4>;
+            key-positions = <38 39>;
         };
     };
 
@@ -176,8 +127,8 @@
         compatible = "zmk,conditional-layers";
 
         tri_layer {
-            if-layers = <RIG LEF>;
-            then-layer = <TRI>;
+            if-layers = <1 2>;
+            then-layer = <3>;
         };
     };
 
@@ -219,18 +170,68 @@
             tapping-term-ms = <350>;
             flavor = "tap-preferred";
         };
+
+        HMShiftR: HMShiftR {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HMSHIFTR";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            hold-while-undecided;
+            hold-trigger-key-positions = <0 1 2 4 5 12 13 14 15 16 17 24 25 26 27 28 29 36 37 38 3>;
+            hold-trigger-on-release;
+        };
+
+        HMShiftL: HMShiftL {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HMSHIFTL";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            hold-while-undecided;
+            hold-trigger-on-release;
+            hold-trigger-key-positions = <6 7 8 9 10 11 18 19 20 21 22 23 30 31 32 33 34 35 39 40 41>;
+        };
+
+        HMR: HMR {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HMR";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            hold-while-undecided;
+            hold-trigger-key-positions = <0 1 2 4 5 12 13 14 15 16 17 24 25 26 27 28 29 36 37 38 3>;
+            hold-trigger-on-release;
+            flavor = "tap-preferred";
+        };
+
+        HML: HML {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HML";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            hold-while-undecided;
+            hold-trigger-on-release;
+            hold-trigger-key-positions = <6 7 8 9 10 11 18 19 20 21 22 23 30 31 32 33 34 35 39 40 41>;
+            flavor = "tap-preferred";
+        };
     };
 
     keymap {
         compatible = "zmk,keymap";
 
-        base {
-            display-name = "Base";
+        main {
+            display-name = "Ergo-L";
             bindings = <
-&kp ESC     &longPress LC(Q) Q  &longPress LC(C) C  &kp O           &longPress PRINTSCREEN P  &kp W        &kp J      &kp M            &kp D            &kp SINGLE_QUOTE  &kp Y              &kp BSPC
-&kp TAB     &mt LEFT_SHIFT A    &mt LCTRL S         &mt LEFT_GUI E  &mt LEFT_ALT N            &kp F        &kp L      &mt RIGHT_ALT R  &mt RIGHT_GUI T  &mt RCTRL I       &mt RIGHT_SHIFT U  &kp DEL
-&kp LSHIFT  &kp Z               &longPress LC(X) X  &kp MINUS       &longPress LC(V) V        &kp B        &kp DOT    &kp H            &kp G            &kp COMMA         &kp K              &kp EQUAL
-                                                    &kp LSHIFT      &lt LEF BSPC              &kp SPACE    &kp ENTER  &lt RIG DEL      &kp TAB
+&kp ESC     &longPress LC(Q) Q  &longPress LC(C) C  &kp O             &longPress PRINTSCREEN P  &kp W        &kp J      &kp M                    &kp D             &quoteDBTap       &kp Y         &kp BSPC
+&kp TAB     &HML LCTRL A        &HML LEFT_ALT S     &HML LEFT_GUI E   &HMShiftL LEFT_SHIFT N    &kp F        &kp L      &HMShiftR RIGHT_SHIFT R  &HMR RIGHT_GUI T  &HMR RIGHT_ALT I  &HMR RCTRL U  &kp DEL
+&kp LSHIFT  &kp Z               &longPress LC(X) X  &underscoreDBTap  &longPress LC(V) V        &kp B        &dotDBTap  &kp H                    &kp G             &colonDBTap       &kp K         &kp EQUAL
+                                                    &kp LSHIFT        &lt LEF BSPC              &kp SPACE    &kp ENTER  &lt RIG DEL              &kp TAB
             >;
         };
 
@@ -244,8 +245,8 @@
             >;
         };
 
-        left_layer {
-            display-name = "^ Left ^";
+        numbers {
+            display-name = "012345";
             bindings = <
 &trans  &kp N1    &kp N2       &kp N3        &kp N4         &kp N5        &kp MINUS      &kp N7         &kp N8       &kp N9         &kp N0        &trans
 &trans  &kp BSLH  &kp LS(DOT)  &kp LS(NUBS)  &kp NUBS       &kp RA(N5)    &kp RA(MINUS)  &kp LS(EQUAL)  &kp LBKT     &kp RBKT       &kp RBKT      &trans
